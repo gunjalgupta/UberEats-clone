@@ -1,0 +1,9 @@
+POST http://localhost:5000/subscribers
+Content-Type: application/json
+
+{
+    "name":"gunjalnew",
+    "subscribedToChannel": "web dev"
+}
+###
+GET http://localhost:5000/subscribers/7

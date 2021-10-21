@@ -22,7 +22,7 @@ require("./models/subscriber");
 console.log(envv);
 
 var authService = require("./services/authService.js");
-//var postService = require("./services/Post/postService");
+var postService = require("./services/Post/postService");
 
 function handleTopicRequest(topic_name, fname) {
   //var topic_name = 'root_topic';
@@ -54,5 +54,29 @@ function handleTopicRequest(topic_name, fname) {
   });
 }
 
+function response(data, res, producer) {
+	console.log("after handle", res);
+	var payloads = [
+		{
+			topic: data.replyTo,
+			messages: JSON.stringify({
+				correlationId: data.correlationId,
+				data: res,
+			}),
+			partition: 0,
+		},
+	];
+	producer.send(payloads, function (err, data) {
+		//console.log('producer send', data);
+		if (err) {
+			console.log("Error when producer sending data", err);
+		} else {
+			console.log(data);
+		}
+	});
+	return;
+}
+
+
 handleTopicRequest("getTopic", authService);
-//handleTopicRequest("postTopic", postService);
+handleTopicRequest("postTopic", postService);

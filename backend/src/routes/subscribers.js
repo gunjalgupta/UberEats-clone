@@ -3,9 +3,9 @@ const router = express.Router()
 const Subscriber = require('../models/subscriber')
 
 // Getting all
-router.get('/', async (req, res) => {
+router.get('/', (req, res) => {
   try {
-    const subscribers = await Subscriber.find()
+    const subscribers = Subscriber.find()
     res.json(subscribers)
   } catch (err) {
     console.log(err)

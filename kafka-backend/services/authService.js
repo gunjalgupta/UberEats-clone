@@ -12,12 +12,14 @@ getSubscriber = async (msg, callback) => {
         res.data = subscriber;
         console.log("res login = ", res);
         return callback(null, res);
-        // res.json({ locations });
+        //res.json({ subscriber });
       })
       .catch((err) => {
         console.log(err);
         res.status = 500;
         res.data = "Internal Server Error!";
+
+        console.log("res = ", res);
         callback(null, res);
       });
   };

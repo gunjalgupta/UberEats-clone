@@ -6,4 +6,4 @@ Content-Type: application/json
     "subscribedToChannel": "web dev"
 }
 ###
-GET http://localhost:5000/subscribers/7
+GET http://localhost:5000/subscribers/getSubscriber

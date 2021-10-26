@@ -6,4 +6,14 @@ Content-Type: application/json
     "subscribedToChannel": "web dev"
 }
 ###
-GET http://localhost:5000/subscribers/getSubscriber
+GET http://localhost:5000/subscribers/getSubscriber/
+###
+POST http://localhost:5000/customer/api/register/
+Content-Type: application/json
+
+{
+    "cname":"gunjalnew",
+    "email": "web",
+    "pwd": "1234"
+}
+###

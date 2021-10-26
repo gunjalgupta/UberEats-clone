@@ -4,7 +4,7 @@ var autoIncrement = require('mongoose-auto-increment');
 
 const customerSchema = new mongoose.Schema({
   customerId:{
-        type:ObjectId,
+        type:Number,
         ref:"customer"
     },
   cname: {
@@ -47,14 +47,20 @@ const customerSchema = new mongoose.Schema({
 
 autoIncrement.initialize(mongoose.connection); // 3. initialize autoIncrement 
 
-customerSchema.plugin(autoIncrement.plugin, 'Subscriber');
-
-customerSchema.set('toJSON', {
-  transform: (_document, returnedObject) => {
-    returnedObject.customerId = returnedObject._id.toString();
-    delete returnedObject._id;
-    delete returnedObject.__v;
-  },
+customerSchema.plugin(autoIncrement.plugin, {
+  model: 'Customer', // collection or table name in which you want to apply auto increment
+  field: "customerId", // field of model which you want to auto increment
+  startAt: 1, // start your auto increment value from 1
+  incrementBy: 1, // incremented by 1
 });
+
+
+// customerSchema.set('toJSON', {
+//   transform: (_document, returnedObject) => {
+//     returnedObject.customerId = returnedObject._id.toString();
+//     delete returnedObject._id;
+//     delete returnedObject.__v;
+//   },
+// });
 
 module.exports = mongoose.model('Customer', customerSchema)

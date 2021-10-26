@@ -65,14 +65,25 @@ const restaurantSchema = new mongoose.Schema({
   },
 },{timestamps:true})
 
-restaurantSchema.plugin(autoIncrement.plugin, 'Restaurant');
 
-restaurantSchema.set('toJSON', {
-  transform: (_document, returnedObject) => {
-    returnedObject.restaurantId = returnedObject._id.toString();
-    delete returnedObject._id;
-    delete returnedObject.__v;
-  },
+autoIncrement.initialize(mongoose.connection); // 3. initialize autoIncrement 
+
+restaurantSchema.plugin(autoIncrement.plugin, {
+  model: 'Restaurant', // collection or table name in which you want to apply auto increment
+  field: "restaurantId", // field of model which you want to auto increment
+  startAt: 1, // start your auto increment value from 1
+  incrementBy: 1, // incremented by 1
 });
+
+
+
+
+// restaurantSchema.set('toJSON', {
+//   transform: (_document, returnedObject) => {
+//     returnedObject.restaurantId = returnedObject._id.toString();
+//     delete returnedObject._id;
+//     delete returnedObject.__v;
+//   },
+// });
 
 module.exports = mongoose.model('Restaurant', restaurantSchema)

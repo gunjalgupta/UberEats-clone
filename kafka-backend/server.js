@@ -19,10 +19,13 @@ mongoose.connection.on("error", (err) => {
 });
 
 require("./models/subscriber");
+require("./models/customer");
 console.log(envv);
 
 var authService = require("./services/authService.js");
-var postService = require("./services/Post/postService");
+var csignup = require("./services/csignup.js");
+var rsignup = require("./services/rsignup.js");
+//var postService = require("./services/Post/postService");
 
 function handleTopicRequest(topic_name, fname) {
   //var topic_name = 'root_topic';
@@ -79,4 +82,6 @@ function response(data, res, producer) {
 
 
 handleTopicRequest("getTopic", authService);
-handleTopicRequest("postTopic", postService);
+handleTopicRequest("csignup", csignup );
+handleTopicRequest("rsignup", rsignup );
+//handleTopicRequest("postTopic", postService);

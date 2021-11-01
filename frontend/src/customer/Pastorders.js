@@ -46,7 +46,7 @@ const Pastorders = () => {
 
   useEffect(() => {
     axios
-      .post("/api/order/getcusorder", {
+      .post("/orders/api/getcusorder", {
         customerId: JSON.parse(localStorage.getItem("customer")).customerId,
       })
       .then((res) => {
@@ -59,13 +59,13 @@ const Pastorders = () => {
 
   const getdetails= (invoiceId)=>{
     axios
-    .post("/api/order/getcusdetail", {
+    .post("/orders/api/getcusdetail", {
       customerId: JSON.parse(localStorage.getItem("customer")).customerId,
       invoiceId : invoiceId,
     })
     .then((res) => {
       console.log(res);
-      setOrderdetails(res.data)
+      setOrderdetails(res.data.orderdetails)
     })
   }
     
@@ -321,7 +321,7 @@ const Pastorders = () => {
             <tr onClick={()=>{toggle()
             getdetails(order.invoiceId)}}>
               <td>{order.rname}</td>
-              <td>{order.orderDate}</td>
+              <td>{order.updatedAt? (order.updatedAt).substring(0,10): order.updatedAt}</td>
               <td>{order.total}</td>
               <td>{order.mode}</td>
               <Modal

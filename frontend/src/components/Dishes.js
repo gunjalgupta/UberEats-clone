@@ -183,7 +183,7 @@ function Dishes({ dname, des, ing, imageKey, price, id , restaurantId,rname}) {
                     className="media"
                     component="img"
                     sx={{ width: 151 }}
-                    image={`/api/images/${imageKey}`}
+                    image={`/imageRestaurant/api/images/${imageKey}`}
                     alt="Live from space album cover"
                   />
                 )}
@@ -374,7 +374,7 @@ function Dishes({ dname, des, ing, imageKey, price, id , restaurantId,rname}) {
                 className="media"
                 component="img"
                 sx={{ width: 151 }}
-                image={`/api/images/${imageKey}`}
+                image={`/imageRestaurant/api/images/${imageKey}`}
                 alt="Live from space album cover"
               />
             )}

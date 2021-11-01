@@ -100,7 +100,7 @@ const Restaurants = ({ Name, Opens_at, imageKey, id ,desc}) => {
             onClick={() => history.push(`/resprofile/${id}`)}
             component="img"
             height="194"
-            image={`/api/images/${imageKey}`}
+            image={`/imageRestaurant/api/images/${imageKey}`}
             alt="Paella dish"
           />
         )}

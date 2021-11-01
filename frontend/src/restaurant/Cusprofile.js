@@ -37,7 +37,7 @@ const Cusprofile=()=>{
 
       useEffect( () => {
 
-        axios.get(`/api/customerprofile/${customerId}`,{})
+        axios.get(`/customer/api/profile/${customerId}`,{})
         .then(response => {
             console.log("res",response);
             if (response.data.error) {
@@ -45,8 +45,8 @@ const Cusprofile=()=>{
             }
             else {
 
-                    setCustomerData(response.data[0])
-                    console.log(response.data[0])
+                    setCustomerData(response.data)
+                    console.log(response.data)
                 
             }
         })     
@@ -99,7 +99,7 @@ const Cusprofile=()=>{
    paddingTop : 100,
    
    
- }} src={`/api/images/${customer.profilepic}`} className="showProfile_img"  />}
+ }} src={`/imageRestaurant/api/images/${customer.profilepic}`} className="showProfile_img"  />}
             </div>
             <div className="name" style={{
    alignSelf: 'center',

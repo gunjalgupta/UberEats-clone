@@ -89,12 +89,13 @@ const Checkout = () => {
     const order = JSON.parse(localStorage.getItem("order"));
     const restId = JSON.parse(localStorage.getItem("rescartid"))[0];
     axios
-      .post("/api/order/addorder", {
+      .post("/orders/api/addorder", {
         customerId: order.customerId,
         restaurantId: restId.restaurantId,
         invoiceId: order.invoiceId,
         total: order.total,
-        mode: mode
+        mode: mode,
+        rname:JSON.parse(localStorage.getItem("cart"))[0].rname,
       })
       .then((response) => {
         //console.log("res", response);
@@ -117,12 +118,15 @@ const Checkout = () => {
             dishId: dish.dishId,
             quantity: dish.quantity,
             price: dish.Price,
-            subtotal: dish.subtotal
+            subtotal: dish.subtotal,
+            dname: dish.dname
           });
         });
         console.log("-----------",dishesToPass);
-        axios.post("/api/order/adddetails", dishesToPass).then((res)=>{
+        axios.post("/orders/api/adddetails", dishesToPass).then((res)=>{
           console.log(res)
+        }).catch((err)=>{
+          console.log(err);
         })
       }).then(()=>{
         
@@ -149,7 +153,7 @@ const Checkout = () => {
   const addAddress = () => {
     console.log(address);
 
-    axios.post("/api/customer/addaddress/",address)
+    axios.post("/customer/api/addaddress/",address)
     .then(response => {
         
         if (response.data.error) {
@@ -174,7 +178,7 @@ const Checkout = () => {
 
   useEffect(() => {
     const customerId =  JSON.parse(localStorage.getItem("customer")).customerId;
-    axios.post(`/api/customer/fetchaddress/${customerId}`,{})
+    axios.post(`/customer/api/fetchaddress/${customerId}`,{})
     .then(response => {
         
         if (response.data.error) {
@@ -183,7 +187,7 @@ const Checkout = () => {
         }
         else {
                 setSavedAddress(response.data)
-                console.log(response.data[0])
+                console.log(response.data)
         }
     })
   },[]);

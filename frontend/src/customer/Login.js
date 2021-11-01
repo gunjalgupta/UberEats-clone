@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import './Login.css';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../actions/userActions';
 import { useHistory, Link } from 'react-router-dom';
 
@@ -12,6 +12,7 @@ function Login() {
     const [pwd , setPwd ] = useState("");
     const [error , setError] = useState("");
     const history = useHistory();
+    const user = useSelector((state) => state.user);
     
     async function cuslogin(event) {
         event.preventDefault();

@@ -5,8 +5,7 @@ var autoIncrement = require('mongoose-auto-increment');
 
 const restaurantSchema = new mongoose.Schema({
   restaurantId:{
-        type:ObjectId,
-        ref:"Restaurant"
+        type:Number,
     },
   rname: {
     type: String,
@@ -23,10 +22,10 @@ const restaurantSchema = new mongoose.Schema({
     type: String,
   },
   toTime:{
-    type: Date,
+    type: String,
   },
   fromTime:{
-    type: Date,
+    type: String,
   },
   email:{
     type: String,
@@ -39,18 +38,23 @@ const restaurantSchema = new mongoose.Schema({
   },
   delivery:{
     type: String,
+    default:"Yes"
   },
   pickup:{
     type: String,
+    default:"Yes"
   },
   veg:{
     type: String,
+    default:"Yes"
   },
   nonVeg:{
     type: String,
+    default:"Yes"
   },
   vegan:{
     type: String,
+    default:"Yes"
   },
   profilepic:{
     type: String,
@@ -62,6 +66,7 @@ const restaurantSchema = new mongoose.Schema({
   stateId:{
     type: String,
   },
+ 
   dishes:[{
     dishId:{
           type:Number,
@@ -100,7 +105,7 @@ const restaurantSchema = new mongoose.Schema({
       type: String,
     },
   }],
-},{timestamps:true})
+},{timestamps:true},{ strict: false })
 
 
 autoIncrement.initialize(mongoose.connection); // 3. initialize autoIncrement 

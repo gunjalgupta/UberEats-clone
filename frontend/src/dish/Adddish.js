@@ -22,11 +22,11 @@ const Adddish = () => {
   const [dname, setdname] = useState();
   const [ingredients, setingredients] = useState();
   const [ddesc, setddesc] = useState();
-  const [cuisineId, setcuisineId] = useState(1);
+  const [cuisine, setcuisineId] = useState();
   const [veg, setveg] = useState("Yes");
   const [nonVeg, setnonveg] = useState("Yes");
   const [vegan, setvegan] = useState("Yes");
-  const [categoryId, setcategoryId] = useState(1);
+  const [categoryId, setcategoryId] = useState();
   const [Price, setPrice] = useState(0);
   const [restaurantId,setrestaurantId]= useState();
   
@@ -55,7 +55,7 @@ const Adddish = () => {
     dname,
     ingredients,
     ddesc,
-    cuisineId,
+    cuisine,
     veg,
     nonVeg,
     vegan,
@@ -64,7 +64,7 @@ const Adddish = () => {
     restaurantId
   };
 
-    axios.post("/api/restaurant/adddish", dishes)
+    axios.post("/restaurant/api/adddish/", {dishes:dishes})
     .then((response) => {
       console.log("update", response);
       if (response.data.error) {
@@ -214,18 +214,18 @@ const Adddish = () => {
                       <label style={{ width: "100%" }}>
                         Cuisine <input className="form-control"  />
                       </label>
-                      <select onChange={(e) => setcuisineId(e.target.value)} value={cuisineId}
-                              defaultValue={{ label: "Chinese", value: "1" }}>
-                        <option value="1" label="Chinese" />
-                        <option value="2" label="Indian" />
-                        <option value="3" label="Mediterrian" />
-                        <option value="4" label="Lebanese" />
-                        <option value="5" label="Italian" />
-                        <option value="6" label="Thai" />
-                        <option value="7" label="South Indian" />
-                        <option value="8" label="Mexican" />
-                        <option value="9" label="Greek" />
-                        <option value="10" label="Korean" />
+                      <select onChange={(e) => setcuisineId(e.target.value)} value={cuisine}
+                      defaultValue={"Chinese"}>
+                        <option value="Chinese" label="Chinese" />
+                        <option value="Indian" label="Indian" />
+                        <option value="Mediterrian" label="Mediterrian" />
+                        <option value="Lebanese" label="Lebanese" />
+                        <option value="Italian" label="Italian" />
+                        <option value="Thai" label="Thai" />
+                        <option value="South Indian" label="South Indian" />
+                        <option value="Mexican" label="Mexican" />
+                        <option value="Greek" label="Greek" />
+                        <option value="Korean" label="Korean" />
                       </select>
                       <p className="help-block text-danger"></p>
                     </div>
@@ -272,12 +272,12 @@ const Adddish = () => {
                         <input type="dropdown" className="form-control"  />
                       </label>
                       <select onChange={(e) => setcategoryId(e.target.value)} value={categoryId} 
-                              defaultValue={{ label: "Apetizer", value: 1 }}>
-                        <option value="1" label="Apetizer" />
-                        <option value="2" label="Salad" />
-                        <option value="3" label="Main course" />
-                        <option value="4" label="Desert" />
-                        <option value="5" label="Beverage" />
+                      defaultValue={"Apetizer"}>
+                        <option value="Apetizer" label="Apetizer" />
+                        <option value="Salad" label="Salad" />
+                        <option value="Main course" label="Main course" />
+                        <option value="Desert" label="Desert" />
+                        <option value="Beverage" label="Beverage" />
                       </select>
                       <p className="help-block text-danger"></p>
                     </div>

@@ -21,7 +21,7 @@ const customerSchema = new mongoose.Schema({
     type: String,
   },
   DOB:{
-    type: Date,
+    type: String,
   },
   email:{
     type: String,

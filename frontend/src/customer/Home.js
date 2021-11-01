@@ -33,7 +33,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import { useDispatch } from "react-redux";
+import { useDispatch ,useSelector} from "react-redux";
 import { logout } from "../actions/userActions";
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
@@ -49,7 +49,7 @@ const Home = () => {
   const [value, setValue] = useState("");
   const [headbg, setheadbg] = useState("transparent");
   const [shadow, setshadow] = useState("none");
- 
+  const user = useSelector((state) => state.user);
 
   const theme = useTheme();
   const [open, setOpen] = useState(false);
@@ -202,7 +202,8 @@ const Home = () => {
   }, []);
 
   const getRestaurants = async () => {
-    const customerId = JSON.parse(localStorage.getItem("customer")).customerId;
+    const customerId= user.user.customerId;
+    //const customerId = JSON.parse(localStorage.getItem("customer")).customerId;
     console.log(customerId);
     await axios
       .post(

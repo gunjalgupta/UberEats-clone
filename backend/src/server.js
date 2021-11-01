@@ -73,6 +73,17 @@ app.use('/customer', customersRouter)
 const restaurantRouter = require('./routes/restaurant')
 app.use('/restaurant', restaurantRouter)
 
+const restaurantImage = require('./routes/imageRestaurant')
+app.use('/imageRestaurant', restaurantImage)
+
+const dishImage = require('./routes/imageDish')
+app.use('/imageDish', dishImage)
+
+const customerImage = require('./routes/uploadroutes')
+app.use('/uploadroutes', customerImage)
+
+const orderRouter = require('./routes/orders')
+app.use('/orders', orderRouter)
 
 var server= app.listen(PORT, () => console.log(`Listening on port ${process.env.PORT}.`));
 

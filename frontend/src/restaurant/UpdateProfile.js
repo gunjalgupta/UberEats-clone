@@ -55,7 +55,7 @@ const UpdateProfile = () => {
         console.log(restaurantId);
         console.log(JSON.parse(localStorage.getItem("restaurant")).restaurantId)
 
-        axios.post(`/api/restaurant/profile/${restaurantId}`, {
+        axios.get(`/restaurant/api/profile/${restaurantId}`, {
         }).then(response => {
             console.log("res",response);
             if (response.data.error) {
@@ -138,7 +138,7 @@ const UpdateProfile = () => {
                                 
                                 const restaurantId = JSON.parse(localStorage.getItem("restaurant")).restaurantId
                                 console.log(restaurantId)
-                                axios.post(`/api/restaurant/updatedetails/`, { restaurantId ,values: values})
+                                axios.post(`restaurant/api/profile/updatedetails/`, { restaurantId ,values: values})
                                     .then(response => {
                                         console.log("update",response)
                                         if (response.data.error) {

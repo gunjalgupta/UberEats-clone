@@ -79,6 +79,174 @@ router.post("/api/login", (req, res) => {
 		}
 	});
 });
+//===========================
+router.get("/api/profile/:restaurantId", (req, res) => {
+	console.log("in");
+	req.body.path = "restaurantProfile";
+	req.body.restaurantId= req.params.restaurantId;
+
+	kafka.make_request("rsignup", req.body, (err,result) => {
+		if (result === 500) {
+			res.writeHead(500, {
+				"Content-Type": "text/plain",
+			});
+			res.end("SERVER_ERROR");
+		} else {
+			res.writeHead(200, {
+				"Content-Type": "text/plain",
+			});
+			res.end(JSON.stringify(result));
+		}
+	});
+});
 //=============================================================
+
+router.post("/api/profile/updatedetails/", (req, res) => {
+	console.log("in");
+	req.body.path = "restaurantDetails";
+
+	kafka.make_request("rsignup", req.body, (err,result) => {
+		if (result === 500) {
+			res.writeHead(500, {
+				"Content-Type": "text/plain",
+			});
+			res.end("SERVER_ERROR");
+		} else {
+			res.writeHead(200, {
+				"Content-Type": "text/plain",
+			});
+			res.end(JSON.stringify(result));
+		}
+	});
+});
+
+//===================================================
+
+router.post("/api/getdish/:restaurantId", (req, res) => {
+	console.log("in");
+	req.body.path = "getDish";
+	req.body.restaurantId= req.params.restaurantId;
+
+	kafka.make_request("rsignup", req.body, (err,result) => {
+		if (result === 500) {
+			res.writeHead(500, {
+				"Content-Type": "text/plain",
+			});
+			res.end("SERVER_ERROR");
+		} else {
+			res.writeHead(200, {
+				"Content-Type": "text/plain",
+			});
+			res.end(JSON.stringify(result));
+		}
+	});
+});
+//=============================================================
+
+
+router.post("/api/adddish/", (req, res) => {
+	console.log("in");
+	req.body.path = "addDish";
+	//req.body.restaurantId= req.params.restaurantId;
+
+	kafka.make_request("rsignup", req.body, (err,result) => {
+		if (result === 500) {
+			res.writeHead(500, {
+				"Content-Type": "text/plain",
+			});
+			res.end("SERVER_ERROR");
+		} else {
+			res.writeHead(200, {
+				"Content-Type": "text/plain",
+			});
+			res.end(JSON.stringify(result));
+		}
+	});
+});
+//=============================================================
+
+router.post("/api/editdish/:dishId", (req, res) => {
+	console.log("in");
+	req.body.path = "editDish";
+	req.body.dishId= req.params.dishId;
+	//req.body.restaurantId= req.params.restaurantId
+
+	kafka.make_request("rsignup", req.body, (err,result) => {
+		if (result === 500) {
+			res.writeHead(500, {
+				"Content-Type": "text/plain",
+			});
+			res.end("SERVER_ERROR");
+		} else {
+			res.writeHead(200, {
+				"Content-Type": "text/plain",
+			});
+			res.end(JSON.stringify(result));
+		}
+	});
+});
+//=============================================================
+
+router.post("/api/deletedish/:dishId", (req, res) => {
+	console.log("in");
+	req.body.path = "deleteDish";
+	req.body.dishId= req.params.dishId;
+
+	kafka.make_request("rsignup", req.body, (err,result) => {
+		if (result === 500) {
+			res.writeHead(500, {
+				"Content-Type": "text/plain",
+			});
+			res.end("SERVER_ERROR");
+		} else {
+			res.writeHead(200, {
+				"Content-Type": "text/plain",
+			});
+			res.end(JSON.stringify(result));
+		}
+	});
+});
+//=============================================================
+
+router.post("/api/getd/:dishId/:restaurantId", (req, res) => {
+	console.log("in");
+	req.body.path = "getDishDetails";
+	req.body.restaurantId= req.params.restaurantId;
+	req.body.dishId= req.params.dishId;
+
+	kafka.make_request("rsignup", req.body, (err,result) => {
+		if (result === 500) {
+			res.writeHead(500, {
+				"Content-Type": "text/plain",
+			});
+			res.end("SERVER_ERROR");
+		} else {
+			res.writeHead(200, {
+				"Content-Type": "text/plain",
+			});
+			res.end(JSON.stringify(result));
+		}
+	});
+});
+//=============================================================
+
+router.post("/api/key/", (req, res) => {
+	console.log("in");
+	req.body.path = "restaurantFindKey";
+	kafka.make_request("rsignup", req.body, (err,result) => {
+		if (result === 500) {
+			res.writeHead(500, {
+				"Content-Type": "text/plain",
+			});
+			res.end("SERVER_ERROR");
+		} else {
+			res.writeHead(200, {
+				"Content-Type": "text/plain",
+			});
+			res.end(JSON.stringify(result.profilepic));
+		}
+	});
+});
+
 
 module.exports = router;

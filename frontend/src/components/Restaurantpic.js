@@ -15,7 +15,7 @@ const Restaurantpic = ({key, imgKey, name, desc, from, to}) =>{
     borderWidth: 1,
     marginBottom: 50
     
-  }} src={`/api/images/${imgKey}`} className="showProfile_img"  />}
+  }} src={`/imageRestaurant/api/images/${imgKey}`} className="showProfile_img"  />}
              </div>
     <div className="name">
         <h1 style={{fontFamily : "UberMove, sans-serif"}}>{name}</h1>

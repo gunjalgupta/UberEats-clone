@@ -4,11 +4,14 @@ import './Profilepic.css';
 
 async function postImages({image,customerId}){
     const formData = new FormData();
+    console.log(formData);
+    console.log(image);
+    console.log(customerId);
     formData.append("image", image)
     formData.append("customerId", customerId)
     
     console.log(formData);
-    const result = await axios.post('/api/images', formData, 
+    const result = await axios.post('/uploadroutes/api/images', formData, 
     { 
         headers: {'Content-Type': 'multipart/form-data'}
     })
@@ -24,6 +27,7 @@ const Profilepic = () => {
   const submit = async (event) => {
       event.preventDefault()
       const result = postImages({image:file, customerId: JSON.parse(localStorage.getItem("customer")).customerId})
+      //console.log("res",result)
       setImages([result.image, ...images])
   }
 

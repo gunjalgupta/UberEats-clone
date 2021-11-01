@@ -87,7 +87,7 @@ function login(message, callback) {
 //=======================================================================
 function getRestaurants(message, callback) {
 	console.log("inside handle req", message);
-	let customerId = message.customerId;
+	let customerId = Number(message.customerId);
 	console.log("EmailId is:", customerId);
 
 	Customers.find({ customerId: customerId},{city:1,stateId:1,countryId:1}, function (err, address) {
@@ -97,20 +97,28 @@ function getRestaurants(message, callback) {
 			callback(null, 500);	
 
 		} else {
-			console.log("addressc1",address);
-      		if(address.city===null){
-        		Restaurants.find({},(err,data)=>{
+			console.log("addressc1",address[0]);
+			console.log("addressc1",address[0].city);
+      		if(address[0].city){
+				Restaurants.find( { 
+					$or: [ {
+						 city :address[0].city 
+					}
+					//, {stateId: address[0].stateId },{countryId : address[0].countryId } 
+				 ] 
+				} ,(err, data) => {
 					if (err) {
 						callback(null, 500);
 					}
           			else {
-            			console.log("all",data);
+            			console.log("location data",data);
 						callback(null, data);
           			}
 				})
+        		
 			}
 			else{
-				Restaurants.find( { $or: [ { city: address.city }, {stateId : address.stateId },{countryId  : address.countryId }  ] } ,(err, data) => {
+				Restaurants.find({},(err,data)=>{
 					if (err) {
 						callback(null, 500);
 					}
@@ -133,17 +141,64 @@ function searchRestaurant(message, callback) {
     let finaldata=[];
 	
 
-//Dish
-// // .find( {$or: [ {dname: name} , {cuisine: name}]}, (err, ids) => {
-// // 	//console.log("ids",ids);
-// // 	if (err) {
-// // 		callback(null, 500);
-// // 	}
-// // 	else {
-// // 		finaldata.push(ids)
-// // 	}
+Dish
+.find( {$or: [ {dname: name} , {cuisine: name}]},{restaurantId:1}, async (err, ids) => {
+	//console.log("ids",ids);
+	if (err) {
+		callback(null, 500);
+	}
+	else {
+		console.log("ids",ids)
+		await Promise.all(ids.map((id)=>{
+			Restaurants.find({restaurantId:id.restaurantId},async (err,rest)=>{
+				if (err){
+					console.log(err);
+					callback(null, 500);
+				}
+				else{
+					console.log("dish",rest)
+					finaldata.push(rest[0])
+					//callback(null,finaldata)
+				}
+			})
+		}),
+		Restaurants.find( {$or: [ {rname: name} , {city: name}, {stateId : name },{countryId  : name}]},  (err, res) => {
+					if(err){
+						console.log(err);
+						callback(null,500);
+					}
+					else{
+						console.log("rest",res)
+						res.map((res1)=>{
+							finaldata.push(res)
+						})
+						//finaldata.push(res)
+						callback(null,finaldata)
+					}
+				}))
+	}
 
-// // })
+})
+// .then((res)=>{
+// 	Restaurants.find( {$or: [ {rname: name} , {city: name}, {stateId : name },{countryId  : name}]},  (err, ids) => {
+// 		if(err){
+// 			console.log(err);
+// 			callback(null,500);
+// 		}
+// 		else{
+// 			console.log("rest",ids)
+// 			finaldata.push(ids)
+// 		}
+// 	})
+// }).then((response)=>{
+
+// 	callback(null, finaldata);
+// }
+// ).catch((err)=>{console.log(err)})
+
+
+//await console.log("data1",finaldata)
+//await 
 // .aggregate([
 
 //     { $match: {$or: [ {dname: name} , {cuisine: name}]} },
@@ -161,18 +216,17 @@ function searchRestaurant(message, callback) {
 // 	 { $project: { fromItems: 0 } }
 	
 // 	])
-Restaurants.find( { $or: [ { city: name }, {stateId : name },{countryId  : name},{rname  : name},{dname:name},{cuisine:name}   ] } ,(err, data) => {
-		if (err) {
-			callback(null, 500);
-		}
-		  else {
-			finaldata.push(data)
-			console.log("all",finaldata);
-			callback(null, data);
-		  }
-	})
-	console.log("data1",finaldata)
-	//callback(null, finaldata);
+// Restaurants.find( { $or: [ { city: name }, {stateId : name },{countryId  : name},{rname  : name},{dname:name},{cuisine:name}   ] } ,(err, data) => {
+// 		if (err) {
+// 			callback(null, 500);
+// 		}
+// 		  else {
+// 			finaldata.push(data)
+// 			console.log("all",finaldata);
+// 			callback(null, data);
+// 		  }
+// 	})
+	
 }
 //======================================================================
 
@@ -199,7 +253,7 @@ function customerProfile(message, callback) {
 
 function customerDetails(message, callback) {
 	console.log("inside handle req", message.values);
-	let customerId = message.customerId;
+	let customerId = Number(message.customerId);
 	let values = message.values;
 	console.log("Id is:", customerId);
 
@@ -207,6 +261,7 @@ function customerDetails(message, callback) {
 		console.log("user from DB reacibed", user);
 
 		if (err) {
+			console.log(err)
 			callback(null, 500);
 		} else {
 			callback(null,user)
@@ -274,59 +329,149 @@ function deletefav(message, callback) {
 //======================================================================
 function showfav(message, callback) {
 	console.log("inside handle req", message.customerId);
-	let customerId= message.customerId;
-	// var fav = new Favourites({ customerId: customerId, restaurantId: restaurantId})
-	// Favourites.remove({ customerId: customerId, restaurantId: restaurantId}, function (err, user) {
+	let customerId= Number(message.customerId);
+
+	let restaurantId= Favourites.restaurantId
+	// Restaurants.aggregate([
+	// 	{
+	// 	   $lookup:
+	// 		  {
+	// 			 from: "favourites",
+	// 			//  localField: "restaurantId",
+	// 			//  foreignField: "restaurantId",
+	// 			 pipeline:[
+	// 				{ $match :
+	// 					{$and:[
+	// 						{ "customerId" : customerId} ,
+	// 						{"restaurantId": restaurantId}
+	// 					]} ,},
+	// 					{
+	// 						$unwind: "$restaurantId",
+	// 					  },
+	// 			],
+	// 			 as: "fromItems"
+	// 		 }
+	// 	},
+	// 	{
+	// 		$replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$fromItems", 0 ] }, "$$ROOT" ] } }
+	// 	 },
+	// 	 { $project: { fromItems: 0 } }
+	//  ]).then((result)=>{
+	// 	callback(null,result)
+	//  })
+	//  .catch((err)=>{
+	// 	callback(null, 500);
+	//  })
+	Restaurants.aggregate([
+		{$lookup:{
+			from: "favourites",
+			localField:"restaurantId",
+			foreignField : "restaurantId",
+			as:"table2" 
+		}},
+		{$unwind:"$table2"},
+		// { "$redact": { 
+		// 	"$cond": [
+		// 		{ "$eq": [ "$table2.customerId", customerId ] }, 
+		// 		"$$KEEP", 
+		// 		"$$PRUNE"
+		// 	]
+		// }},
+		//{$match: {"table2.customerId" : customerId}},
+		{$match: {$expr :{ $eq: [ "$table2.customerId", customerId] }}},
+		//{$project: {table2:0}}
+
+	]).then((result)=>{
+		console.log("--------------------------",result);
+		 	callback(null,result)
+		  })
+}
+//============================
+
+	function cusImage(message, callback) {
+			console.log("inside handle req", message.values);
+			let customerId = message.customerId;
+			let key= message.key;
+			console.log("Id is:", customerId);
+		
+			Customers.findOneAndUpdate({ customerId: customerId}, {profilepic:key}, function (err, user) {
+				console.log("user from DB reacibed", user);
+		
+				if (err) {
+					callback(null, 500);
+				} else {
+					callback(null,user)
+				}
+			});
+		
+		}
+//======================================================================
+function customerKey(message, callback) {
+	console.log("inside handle req", message.values);
+	let customerId = message.customerId;
+	//let values = message.values;
+	console.log("Id is:", customerId);
+
+	Customers.findOne({ customerId: customerId}, function (err, user) {
+		console.log("user from DB reacibed", user);
+
+		if (err) {
+			callback(null, 500);
+		} else {
+			callback(null,user)
+		}
+	});
+
+}
+//======================================================================
+function addaddress(message, callback) {
+	console.log("inside handle req", message);
+	let customerId = message.customerId;
+	//let values = message.values;
+	console.log("Id is:", customerId);
+
+	// const cus = Customers.findOne({ customerId: customerId});
+	// console.log(cus);
+	// cus.save({address:message }, function (err, user) {
 	// 	console.log("user from DB reacibed", user);
 
 	// 	if (err) {
 	// 		callback(null, 500);
-	
 	// 	} else {
 	// 		callback(null,user)
 	// 	}
 	// });
+	Customers.updateOne({customerId:customerId}, {
+		$addToSet:{
+			address: message
+		}
+	}, (err, user)=>{
+		console.log("user from DB reacibed", user);
 
-	Restaurants.aggregate([
-		{
-		   $lookup:
-			  {
-				 from: "favourites",
-				//  localField: "restaurantId",
-				//  foreignField: "restaurantId",
-				 pipeline:[
-					{ $match :
-						{$and:[
-							{ "customerId" : customerId} ,
-							{"restaurantId": "$restaurantId"}
-						]} ,},
-						{
-							$unwind: "$restaurantId",
-						  },
-				],
-				 as: "fromItems"
-			 }
-		},
-		{
-			$replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$fromItems", 0 ] }, "$$ROOT" ] } }
-		 },
-		 { $project: { fromItems: 0 } }
-		//  , function (err, user) {
-		// 	console.log("user from DB reacibed", user);
-	
-		// 	if (err) {
-		// 		callback(null, 500);
-		
-		// 	} else {
-		// 		callback(null,user)
-		// 	}
-		// }
-	 ]).then((result)=>{
-		callback(null,result)
-	 })
-	//  .catch((err)=>{
-	// 	callback(null, 500);
-	//  })
+		if (err) {
+			callback(null, 500);
+		} else {
+			callback(null,user)
+		}
+	})
+
+}
+//======================================================================
+function fetchaddress(message, callback) {
+	console.log("inside handle req", message);
+	let customerId = message.customerId;
+	//let values = message.values;
+	console.log("Id is:", customerId);
+
+	Customers.findOne({ customerId: customerId},{address:1,_id:0}, function (err, user) {
+		console.log("user from DB reacibed", user);
+
+		if (err) {
+			callback(null, 500);
+		} else {
+			callback(null,user)
+		}
+	});
 
 }
 //======================================================================
@@ -372,6 +517,22 @@ function handle_request(msg, callback) {
 	if (msg.path === "showfav") {
 		delete msg.path;
 		showfav(msg, callback);
+	  } 
+	if (msg.path === "cusimage") {
+		delete msg.path;
+		cusImage(msg, callback);
+	  } 
+	if (msg.path === "customerFindKey") {
+		delete msg.path;
+		customerKey(msg, callback);
+	  } 
+	  if (msg.path === "addaddress") {
+		delete msg.path;
+		addaddress(msg, callback);
+	  } 
+	if (msg.path === "fetchaddress") {
+		delete msg.path;
+		fetchaddress(msg, callback);
 	  } 
   }
 

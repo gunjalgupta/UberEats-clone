@@ -243,7 +243,60 @@ router.post("/api/showfav/:customerId", (req, res) => {
 });
 //===========================================
 
+router.post("/api/key/", (req, res) => {
+	console.log("in");
+	req.body.path = "customerFindKey";
+	kafka.make_request("csignup", req.body, (err,result) => {
+		if (result === 500) {
+			res.writeHead(500, {
+				"Content-Type": "text/plain",
+			});
+			res.end("SERVER_ERROR");
+		} else {
+			res.writeHead(200, {
+				"Content-Type": "text/plain",
+			});
+			res.end(JSON.stringify(result.profilepic));
+		}
+	});
+});
 
-
+//=================================================
+router.post("/api/addaddress/", (req, res) => {
+	console.log("in");
+	req.body.path = "addaddress";
+	kafka.make_request("csignup", req.body, (err,result) => {
+		if (result === 500) {
+			res.writeHead(500, {
+				"Content-Type": "text/plain",
+			});
+			res.end("SERVER_ERROR");
+		} else {
+			res.writeHead(200, {
+				"Content-Type": "text/plain",
+			});
+			res.end(JSON.stringify(result));
+		}
+	});
+});
+//======================================
+router.post("/api/fetchaddress/:customerId", (req, res) => {
+	console.log("in");
+	req.body.path = "fetchaddress";
+	req.body.customerId= req.params.customerId;
+	kafka.make_request("csignup", req.body, (err,result) => {
+		if (result === 500) {
+			res.writeHead(500, {
+				"Content-Type": "text/plain",
+			});
+			res.end("SERVER_ERROR");
+		} else {
+			res.writeHead(200, {
+				"Content-Type": "text/plain",
+			});
+			res.end(JSON.stringify(result.address));
+		}
+	});
+});
 
 module.exports = router;

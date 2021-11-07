@@ -12,15 +12,12 @@ router.post("/api/register", (req, res) => {
 	req.body.path = "register";
 	kafka.make_request("csignup", req.body, (err, result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			
+			res.status(500).send({message:"Server Error"});
 		} else if (result === 299) {
-			res.writeHead(299, {
-				"Content-Type": "text/plain",
-			});
-			res.end("EMAIL_EXIST");
+			
+
+			res.status(299).send({message:"Email already exists"});
 		} else {
 			const payload = { _id: result.userid };
 			const token = jwt.sign(payload, secret, {
@@ -45,20 +42,14 @@ router.post("/api/login", (req, res) => {
 			console.log(err);
 		} else {
 			if (result === 500) {
-				res.writeHead(500, {
-					"Content-Type": "text/plain",
-				});
-				res.end("SERVER_ERROR");
+				
+				res.status(500).send({message:"Server Error"});
 			} else if (result === 207) {
-				res.writeHead(207, {
-					"Content-Type": "text/plain",
-				});
-				res.end("NO_USER");
+				
+				res.status(207).send({message:"User not found"});
 			} else if (result === 209) {
-				res.writeHead(209, {
-					"Content-Type": "text/plain",
-				});
-				res.end("INCORRECT_PASSWORD");
+				
+				res.status(209).send({message:"Incorrect password"});
 			} else {
 				const payload = { _id: result._id };
 				const token = jwt.sign(payload, secret, {
@@ -87,10 +78,8 @@ router.post("/api/getRestarants/:customerId", (req, res) => {
 	req.body.customerId= req.params.customerId;
 	kafka.make_request("csignup", req.body, (err,result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			
+			res.status(500).send({message:"Server Error"});
 		} else {
 			res.writeHead(200, {
 				"Content-Type": "text/plain",
@@ -106,10 +95,8 @@ router.post("/api/searchRestaurant/", (req, res) => {
 	req.body.path = "searchRestaurant";
 	kafka.make_request("csignup", req.body, (err,result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			
+			res.status(500).send({message:"Server Error"});
 		} else {
 			res.writeHead(200, {
 				"Content-Type": "text/plain",
@@ -126,10 +113,8 @@ router.get("/api/profile/:customerId", (req, res) => {
 
 	kafka.make_request("csignup", req.body, (err,result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			
+			res.status(500).send({message:"Server Error"});
 		} else {
 			res.writeHead(200, {
 				"Content-Type": "text/plain",
@@ -145,10 +130,8 @@ router.post("/api/profile/updatedetails/", (req, res) => {
 
 	kafka.make_request("csignup", req.body, (err,result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			
+			res.status(500).send({message:"Server Error"});
 		} else {
 			res.writeHead(200, {
 				"Content-Type": "text/plain",
@@ -165,10 +148,8 @@ router.post("/api/checkfav", (req, res) => {
 
 	kafka.make_request("csignup", req.body, (err,result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			
+			res.status(500).send({message:"Server Error"});
 		} 
 		else if(result.length ===0){
 			res.send("failed");
@@ -186,10 +167,8 @@ router.post("/api/addfav", (req, res) => {
 
 	kafka.make_request("csignup", req.body, (err,result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			
+			res.status(500).send({message:"Server Error"});
 		} 
 		else {
 			res.writeHead(200, {
@@ -207,10 +186,8 @@ router.post("/api/deletefav", (req, res) => {
 
 	kafka.make_request("csignup", req.body, (err,result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			
+			res.status(500).send({message:"Server Error"});
 		} 
 		else {
 			res.writeHead(200, {
@@ -228,10 +205,8 @@ router.post("/api/showfav/:customerId", (req, res) => {
 
 	kafka.make_request("csignup", req.body, (err,result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			
+			res.status(500).send({message:"Server Error"});
 		} 
 		else {
 			res.writeHead(200, {
@@ -248,10 +223,8 @@ router.post("/api/key/", (req, res) => {
 	req.body.path = "customerFindKey";
 	kafka.make_request("csignup", req.body, (err,result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			
+			res.status(500).send({message:"Server Error"});
 		} else {
 			res.writeHead(200, {
 				"Content-Type": "text/plain",
@@ -267,10 +240,8 @@ router.post("/api/addaddress/", (req, res) => {
 	req.body.path = "addaddress";
 	kafka.make_request("csignup", req.body, (err,result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			
+			res.status(500).send({message:"Server Error"});
 		} else {
 			res.writeHead(200, {
 				"Content-Type": "text/plain",
@@ -286,10 +257,8 @@ router.post("/api/fetchaddress/:customerId", (req, res) => {
 	req.body.customerId= req.params.customerId;
 	kafka.make_request("csignup", req.body, (err,result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			
+			res.status(500).send({message:"Server Error"});
 		} else {
 			res.writeHead(200, {
 				"Content-Type": "text/plain",

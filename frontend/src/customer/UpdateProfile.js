@@ -13,32 +13,36 @@ import {
 import "./UpdateProfile.css";
 import Showprofile from "./Showprofile";
 import Profilepic from "./Profilepic";
-import { useDispatch } from "react-redux";
-import { logout } from "../actions/userActions";
+import { useDispatch, useSelector } from "react-redux";
+import { logout,login } from "../actions/userActions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {
+  
+  Menu,
+  LocationOn,
+} from "@mui/icons-material";
+import CustomerSidebar from "../components/CustomerSidebar"
+
 //import "materialize-css/dist/css/materialize.min.css";
 
 const UpdateProfile = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [customerData, setcustomerData] = useState([]);
-  const [image, setImage] = useState([]);
-  const [url, setUrl] = useState([]);
-  const [dob, setDob] = useState([]);
   const [headbg, setheadbg] = useState("transparent");
   const [shadow, setshadow] = useState("none");
-  const [inputdisplay, setinputdisplay] = useState(0);
+  const user = useSelector((state) => state.user);
 
   window.addEventListener("scroll", () => {
     if (window.scrollY >= 50) {
       setheadbg("#FFFFFF");
       setshadow("rgb(226 226 226) 0px -2px 0px inset");
-      setinputdisplay(1);
+    
     } else {
       setheadbg("transparent");
       setshadow("none");
-      setinputdisplay(0);
+     
     }
   });
 
@@ -49,7 +53,7 @@ const UpdateProfile = () => {
   }
 
   useEffect(() => {
-    const customerId = JSON.parse(localStorage.getItem("customer")).customerId;
+    const customerId = user.user.customerId;
 
     axios.get(`/customer/api/profile/${customerId}`, {}).then((response) => {
       console.log("res", response);
@@ -60,21 +64,13 @@ const UpdateProfile = () => {
         setcustomerData(response.data);
         console.log(response.data);
         //console.log("resss ",customerData);
-        localStorage.setItem("customer", JSON.stringify(response.data));
-
-        setDob(
-          customerData.DOB == null
-            ? customerData.DOB
-            : customerData.DOB.substr(0, 10)
-        );
+        //localStorage.setItem("customer", JSON.stringify(response.data));
+        dispatch(login( response.data))
+       
       }
     });
 
-    // console.log("res",response);
-    // if (response.data.error) {
-    //     console.log("res",response.data[0]);
-    //    // M.toast({ html: response.data[0].error, classes: "#c62828 red darken-3" })
-    // }
+  
   }, []);
 
   return customerData.email ? (
@@ -86,12 +82,19 @@ const UpdateProfile = () => {
             style={{ backgroundColor: headbg, boxShadow: shadow }}
           >
             <div className="header__upperheaderleft">
-              <Link to="/chome">
+              {/* <Link to="/chome">
                 <img
                   src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg "
                   alt="uber eats"
                 />{" "}
-              </Link>
+              </Link> */}
+              <Menu
+              style={{
+                marginRight: "30px",
+              }}
+            />
+
+            <CustomerSidebar/>
             </div>
 
             {/* <div className="header__upperheadercenter"   >
@@ -147,9 +150,7 @@ const UpdateProfile = () => {
                 //             console.log(err)
                 //         })
                 // }
-                const customerId = JSON.parse(
-                  localStorage.getItem("customer")
-                ).customerId;
+                const customerId = user.user.customerId;
                 console.log(customerId);
                 axios
                   .post(`/customer/api/profile/updatedetails/`, {
@@ -173,6 +174,7 @@ const UpdateProfile = () => {
                         draggable: true,
                         progress: undefined,
                       });
+                      dispatch(login(response.data))
                     }
                   })
                   .catch((err) => {

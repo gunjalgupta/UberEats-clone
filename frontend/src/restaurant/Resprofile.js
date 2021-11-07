@@ -18,34 +18,44 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import bcrypt from 'bcryptjs';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../actions/userActions";
+import { addCart,removeCart } from "../actions/cartActions";
+import { addOrder,placeOrder } from "../actions/orderActions";
+import CustomerSidebar from "../components/CustomerSidebar"
+import {
+  
+  Menu,
+} from "@mui/icons-material";
+
 var _ = require('lodash');
 
 function Resprofile() {
 
   const history = useHistory();
   const dispatch= useDispatch();
+  const user = useSelector((state) => state.user);
+  const cartt= useSelector((state) => state.cart);
+  const orderr= useSelector((state)=>state.order);
   const [restaurant, setRestaurant] = useState([]);
   const [dishes, setDishes] = useState([]);
-  const [cart, setCart] = useState([JSON.parse(localStorage.getItem("cart"))]);
+  const [cart, setCart] = useState([cartt.cart]);
   const [headbg, setheadbg] = useState("transparent");
   const [shadow, setshadow] = useState("none");
-  const [inputdisplay, setinputdisplay] = useState(0);
-  const customerId =  JSON.parse(localStorage.getItem("customer")).customerId;
+  const customerId =  user.user.customerId;
   const { restaurantId } = useParams();
-  const custId = String(JSON.parse(localStorage.getItem("customer")).customerId)
-  let invoiceId = bcrypt.hashSync(custId,10);
+  const custId = String(user.user.customerId)
+  const invoiceId = bcrypt.hashSync(custId,10);
 
   window.addEventListener("scroll", () => {
     if (window.scrollY >= 50) {
       setheadbg("#FFFFFF");
       setshadow("rgb(226 226 226) 0px -2px 0px inset");
-      setinputdisplay(1);
+   
     } else {
       setheadbg("transparent");
       setshadow("none");
-      setinputdisplay(0);
+    
     }
   });
 
@@ -53,12 +63,17 @@ function Resprofile() {
   const cartorder={
     customerId,
     restaurantId: Number(restaurantId),
-    total : _.sumBy(JSON.parse(localStorage.getItem("cart")), (dish) => dish.subtotal),
+    total : _.sumBy(cartt.cart, (dish) => dish.subtotal),
     invoiceId,
-    dishes: JSON.parse(localStorage.getItem("cart")) ? JSON.parse(localStorage.getItem("cart")) : []
+    dishes: cartt.cart ? cartt.cart: []
   }
 
-  localStorage.setItem('order',JSON.stringify(cartorder))
+  //localStorage.setItem('order',JSON.stringify(cartorder))
+  //dispatch(addOrder(JSON.stringify(cartorder)));
+  useEffect(()=>{
+
+    dispatch(addOrder(cartorder));
+  },[])
 
   const useModal = () => {
     const [isShowing, setIsShowing] = useState(false);
@@ -86,7 +101,7 @@ function Resprofile() {
               role="dialog"
             >
               <div className="modal">
-                <div style={{ display: "flex", alignItems: "center",fontSize:30}}>  {JSON.parse(localStorage.getItem("cart"))? JSON.parse(localStorage.getItem("cart"))[0].rname:<p></p>}</div>
+                <div style={{ display: "flex", alignItems: "center",fontSize:30}}>  {cartt.cart? cartt.cart[0].rname:<p></p>}</div>
                 <div className="modal-header" style={{justifyContent: 'flex-end'}}>
                   <button
                     type="button"
@@ -106,7 +121,7 @@ function Resprofile() {
                   style={{paddingBottom: '25px'}}
                 >
                   <br />
-                  {localStorage.getItem("cart")? 
+                  {cartt.cart? 
                   <div >Cart Items
                   <div style={{display :"flex", flexDirection:"row"}}> 
                   <div>Dish name  </div> <div style={{paddingLeft:"85px"}}>   Quantity </div><div style={{paddingLeft:"110px"}}>  Subtotal</div></div></div>
@@ -114,8 +129,8 @@ function Resprofile() {
                 </Typography>
 
                  <Grid container spacing={3}>
-                  {localStorage.getItem("cart")?
-                    localStorage.getItem("cart") && JSON.parse(localStorage.getItem("cart")).map((dish) => (
+                  {cartt.cart?
+                    cartt.cart && cartt.cart.map((dish) => (
                       <Grid container item>
                         <Grid container xs={4}>
                           {dish.dname}
@@ -139,7 +154,7 @@ function Resprofile() {
                   sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}
                 >
                   <br></br>
-                  {localStorage.getItem("cart")? <Link to ='/checkout'style={{paddingTop: '40px'}}>
+                  {cartt.cart? <Link to ='/checkout'style={{paddingTop: '40px'}}>
                   
                   <Button
                     onClick={() => {
@@ -182,8 +197,6 @@ function Resprofile() {
   }, []);
 
   const getRestaurant = async () => {
-    //const customerId =  JSON.parse(localStorage.getItem("customer")).customerId;
-
     await axios
       .get(`/restaurant/api/profile/${restaurantId}`, {})
       .then((responseData) => {
@@ -195,8 +208,6 @@ function Resprofile() {
           //setcustomerData(responseData.data)
           setRestaurant(responseData.data);
           console.log("restaurant", responseData.data);
-          //console.log("resss ",customerData);
-          //localStorage.setItem("restaurant", JSON.stringify(responseData.data));
         }
       });
   };
@@ -216,8 +227,6 @@ function Resprofile() {
           setDishes(responseData.data);
           console.log(" dishes", responseData.data);
 
-          //console.log("resss ",customerData);
-          //localStorage.setItem('dish', JSON.stringify(responseData.data));
         }
       });
   };
@@ -238,12 +247,14 @@ function Resprofile() {
         >
           <div className="header__upperheaderleft">
             
-            <Link to="/chome">
-              <img
-                src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg "
-                alt="uber eats"
-              />{" "}
-            </Link>
+            
+            <Menu
+              style={{
+                marginRight: "30px",
+              }}
+            />
+
+            <CustomerSidebar/>
           </div>
           <div className="header__upperheadercenter"   >
                <LocationOn />
@@ -255,8 +266,8 @@ function Resprofile() {
               <ShoppingCartOutlinedIcon style={{ color: "black" }} />
               <span className="empty-message">
                 {" "}
-                {localStorage.getItem("cart")
-                  ? JSON.parse(localStorage.getItem("cart")).length
+                {cartt.cart
+                  ? cartt.cart.length
                   : "Your cart is empty"}
               </span>{" "}
             </p>

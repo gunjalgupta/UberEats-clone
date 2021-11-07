@@ -25,11 +25,20 @@ function Register(){
             console.log("------",regAdmin)
             const res = await axios.post("/restaurant/api/register",regAdmin);
             console.log("response", res);
-            dispatch(registerRestaurant({
-                email: res.data.email,
-                signedIn: true, 
-            }))
-            history.push("/rlogin");
+            if(res.status == 200) {
+                dispatch(registerRestaurant({
+                    email: res.data.email,
+                    signedIn: true, 
+                }))
+                history.push("/rlogin");
+            }
+         
+            else {
+                console.log("error",res.data.message);
+                console.log("incatch")
+                setError(res.data.message)
+            }
+            
         }catch(err){
             console.log("error",err.response.message);
             console.log("incatch")

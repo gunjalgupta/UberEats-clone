@@ -256,7 +256,7 @@ function customerDetails(message, callback) {
 	let customerId = Number(message.customerId);
 	let values = message.values;
 	console.log("Id is:", customerId);
-
+	try{
 	Customers.findOneAndUpdate({ customerId: customerId}, values, function (err, user) {
 		console.log("user from DB reacibed", user);
 
@@ -267,6 +267,10 @@ function customerDetails(message, callback) {
 			callback(null,user)
 		}
 	});
+}
+catch(err){
+	console.log(err);
+}
 
 }
 //======================================================================

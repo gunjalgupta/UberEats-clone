@@ -8,8 +8,10 @@ import { useHistory } from "react-router-dom";
 import Restaurant from "../components/Restaurants";
 import ReactDOM from "react-dom";
 import {
+  
   Menu,
   LocationOn,
+  Search
 } from "@mui/icons-material";
 import "./Home.css";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
@@ -17,15 +19,6 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { styled, useTheme } from "@mui/material/styles";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormGroup from "@mui/material/FormGroup";
@@ -35,32 +28,28 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { useDispatch ,useSelector} from "react-redux";
 import { logout } from "../actions/userActions";
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ReceiptIcon from '@mui/icons-material/Receipt';
+import { login } from '../actions/userActions';
+import CustomerSidebar from "../components/CustomerSidebar"
+import Slider from '@mui/material/Slider';
+import { orderPlaced } from "../actions/cartActions";
+
 
 const Home = () => {
   const history = useHistory();
   const dispatch= useDispatch();
   const [search, setsearch] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
+  const [customerData, setcustomerData]= useState();
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [value, setValue] = useState("");
   const [headbg, setheadbg] = useState("transparent");
   const [shadow, setshadow] = useState("none");
   const user = useSelector((state) => state.user);
+  const cartt = useSelector((state)=>state.cart)
+  
 
-  const theme = useTheme();
-  const [open, setOpen] = useState(false);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+ 
+  
 
   window.addEventListener("scroll", () => {
     if (window.scrollY >= 50) {
@@ -83,9 +72,28 @@ const Home = () => {
   //   color: theme.palette.text.secondary,
   // }));
 
+  useEffect(() => {
+    const customerId = user.user.customerId;
+
+    axios.get(`/customer/api/profile/${customerId}`, {}).then((response) => {
+      //console.log("res", response);
+      if (response.data.error) {
+        console.log("res", response);
+        M.toast({ html: response.data.error, classes: "#c62828 red darken-3" });
+      } else {
+        setcustomerData(response.data);
+        console.log(response.data);
+        dispatch(login( response.data))
+
+        
+      }
+    });
+
+  
+  }, []);
+
   function signout(){
     dispatch(logout());
-    localStorage.setItem("customer",null);
     history.push("/")
   }
 
@@ -115,7 +123,7 @@ const Home = () => {
               role="dialog"
             >
               <div className="modal">
-              <div style={{ display: "flex", alignItems: "center",fontSize:30}}> {JSON.parse(localStorage.getItem("cart"))?JSON.parse(localStorage.getItem("cart"))[0].rname: <p/>}</div>
+              <div style={{ display: "flex", alignItems: "center",fontSize:30}}> {cartt.cart?cartt.cart[0].rname: <p/>}</div>
                
                 <div className="modal-header" style={{justifyContent: 'flex-end'}}>
                   <button
@@ -137,7 +145,7 @@ const Home = () => {
                   style={{paddingBottom: '25px'}}
                 >
                   <br />
-                  {localStorage.getItem("cart")? 
+                  {cartt.cart? 
                   <div >Cart Items
                   <div style={{display :"flex", flexDirection:"row"}}> 
                   <div>Dish name  </div> <div style={{paddingLeft:"85px"}}>   Quantity </div><div style={{paddingLeft:"110px"}}>  Subtotal</div></div></div>
@@ -146,8 +154,8 @@ const Home = () => {
                 </Typography>
                 <Grid container spacing={3}>
                   
-                  {localStorage.getItem("cart")?localStorage.getItem("cart") &&
-                    JSON.parse(localStorage.getItem("cart")).map((dish) => (
+                  {cartt.cart?cartt.cart&&
+                    cartt.cart.map((dish) => (
                       <Grid container item>
                         <Grid container xs={4}>
                           {dish.dname}
@@ -172,7 +180,7 @@ const Home = () => {
                 >
                   
 
-                  {localStorage.getItem("cart")? <Link to ='/checkout'style={{paddingTop: '40px'}}>
+                  {cartt.cart? <Link to ='/checkout'style={{paddingTop: '40px'}}>
                   
                   <Button
                     onClick={() => {
@@ -199,11 +207,11 @@ const Home = () => {
 
   useEffect(() => {
     getRestaurants();
+    //dispatch(orderPlaced());
   }, []);
 
   const getRestaurants = async () => {
     const customerId= user.user.customerId;
-    //const customerId = JSON.parse(localStorage.getItem("customer")).customerId;
     console.log(customerId);
     await axios
       .post(
@@ -226,8 +234,6 @@ const Home = () => {
           //setcustomerData(responseData.data)
           setRestaurants(responseData.data);
           console.log(responseData.data);
-          //console.log("resss ",customerData);
-          // localStorage.setItem('restaurant', JSON.stringify(responseData.data));
         }
       });
   };
@@ -251,8 +257,7 @@ const Home = () => {
           setRestaurants(responseData.data);
           //setRestaurants(responseData.data)
           console.log(responseData.data);
-          //console.log("resss ",customerData);
-          //localStorage.setItem('restaurant', JSON.stringify(responseData.data));
+         
         }
       });
   }
@@ -318,18 +323,19 @@ const Home = () => {
               style={{
                 marginRight: "30px",
               }}
-              onClick={handleDrawerOpen}
+              
             />
-            <a href="/chome">
-              <img
-                src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg "
-                alt="uber eats"
-              />
-            </a>
+
+            <CustomerSidebar/>
+           
           </div>
 
+          <div className="header__upperheaderright">
+
+            <p> <LocationOn /> {user.user.city!==''?user.user.city: "Enter your location"}</p>
+          </div>
           <div className="header__upperheadercenter">
-            <LocationOn />
+            <Search/>
             <input
               type="text"
               placeholder="What are you craving? "
@@ -344,8 +350,8 @@ const Home = () => {
               <ShoppingCartOutlinedIcon style={{ color: "black" }} />
               <span className="empty-message">
                 {" "}
-                {localStorage.getItem("cart")
-                  ? JSON.parse(localStorage.getItem("cart")).length
+                {cartt.cart
+                  ? cartt.cart.length
                   : "Your cart is empty"}
               </span>{" "}
             </p>
@@ -359,84 +365,88 @@ const Home = () => {
             <p> Sign out </p>
           </div>
         </div>
-
-        <Drawer
-          sx={{
-            width: drawerWidth,
-            flexShrink: 0,
-            "& .MuiDrawer-paper": {
-              width: drawerWidth,
-              boxSizing: "border-box",
-            },
-          }}
-          variant="persistent"
-          anchor="left"
-          open={open}
-        >
-          <DrawerHeader>
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === "ltr" ? (
-                <ChevronLeftIcon />
-              ) : (
-                <ChevronRightIcon />
-              )}
-            </IconButton>
-            <img
-                src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg "
-                alt="uber eats"
-              />
-          </DrawerHeader>
-          <Divider />
-          <List>
-          <ListItem >
-          
-                <ListItemIcon >
-                <Link to ='./cprofile' style={{color:'black',}}>
-                 <AccountBoxIcon /> </Link>  
-                </ListItemIcon> 
-                <ListItemText> <Link to ='./cprofile' style={{textDecoration:'none', color:"black"}}>  View profile </Link></ListItemText>
-              </ListItem>
-        <ListItem >
-          
-                <ListItemIcon>
-                <Link to ='./cprofile' style={{color:'black',}}>
-                 <AssignmentIndIcon />   
-                 </Link>  
-                </ListItemIcon> 
-                <ListItemText> <Link to ='./cprofile' style={{textDecoration:'none', color:"black"}}>  Update profile </Link></ListItemText>
-              </ListItem>
-              <ListItem >
-           
-                <ListItemIcon>
-                <Link to ='./favourite' style={{color:'black',}}> 
-                 <FavoriteIcon />  </Link>
-                </ListItemIcon> 
-                <ListItemText>  <Link to ='./favourite' style={{textDecoration:'none', color:"black"}}>  Favourites </Link></ListItemText>
-              </ListItem>
-              <ListItem >
-          
-                <ListItemIcon>
-                <Link to ='./pastorders' style={{color:'black',}}> 
-                 <ReceiptIcon />  </Link> 
-                </ListItemIcon> 
-                <ListItemText>  <Link to ='./pastorders' style={{textDecoration:'none', color:"black"}}>   Orders</Link></ListItemText>
-              </ListItem>
-          </List>
-          <Divider />
-        </Drawer>
       </div>
-      <div></div>
+      <div style={{paddingTop: 110,paddingLeft:40, display:"flex", justifyContent:"space-between"}}>
+        
+        <div>
+        <img src='https://d4p17acsd5wyj.cloudfront.net/shortcuts/deals.png'
+        style={{height: '75px'}}></img>
+        <p style={{paddingLeft:10}}>Deals</p>
+        </div>
+        <div>
+        <img src='https://d4p17acsd5wyj.cloudfront.net/shortcuts/convenience.png'
+        style={{height: '75px'}}></img>
+        <p>Convienience</p>
+        </div>
+        <div>
+        <img src='https://d4p17acsd5wyj.cloudfront.net/shortcuts/alcohol.png'
+        style={{height: '75px'}}></img>
+        <p style={{paddingLeft:20}}>Alcohol</p>
+        </div>
+        <div>
+        <img src='https://d4p17acsd5wyj.cloudfront.net/shortcuts/pharmacy.jpg'
+        style={{height: '75px'}}></img>
+        <p>Pharmacy</p>
+        </div>
+        <div>
+        <img src='https://d4p17acsd5wyj.cloudfront.net/shortcuts/baby.png'
+        style={{height: '75px'}}></img>
+        < p style={{paddingLeft:20}}>      Baby</p>
+        </div>
+        <div>
+        <img src='https://d4p17acsd5wyj.cloudfront.net/shortcuts/specialty_foods.jpg'
+        style={{height: '75px'}}></img>
+        <p>Speciality foods</p>
+        </div>
+        <div>
+        <img src='https://d4p17acsd5wyj.cloudfront.net/shortcuts/flowers.jpg'
+        style={{height: '75px'}}></img>
+        <p style={{paddingLeft:20}}>Flowers</p>
+        </div>
+        <div>
+        <img src='https://d4p17acsd5wyj.cloudfront.net/shortcuts/retail.jpg'
+        style={{height: '75px'}}></img>
+        <p style={{paddingLeft:20}}> Retail</p>
+        </div>
+        <div>
+        <img src='https://d4p17acsd5wyj.cloudfront.net/shortcuts/top_eats.png'
+        style={{height: '75px'}}></img>
+        <p style={{paddingLeft:10}}>Top Eats</p>
+        </div>
+        <div>
+        <img src='https://d4p17acsd5wyj.cloudfront.net/shortcuts/cuisines/coffeeandtea.png'
+        style={{height: '75px'}}></img>
+        <p style={{paddingLeft:20}}>Coffee</p>
+        </div>
+        <div>
+        <img src='https://d4p17acsd5wyj.cloudfront.net/shortcuts/cuisines/bakery.png'
+        style={{height: '75px'}}></img>
+        <p style={{paddingLeft:15}}>Bakery</p>
+        </div>
+        <div>
+        <img src='https://d4p17acsd5wyj.cloudfront.net/shortcuts/cuisines/asian.png'
+        style={{height: '75px'}}></img>
+        <p style={{paddingLeft:20}}>Asian</p>
+        </div>
+      
+      </div>
+
+       <hr style={{marginTop:30, marginLeft:35, marginRight:35, color:"gray"}} />
       <Grid
         container
         style={{
-          paddingTop: "120px",
+          paddingTop: "40px",
           paddingLeft:'30px'
         }}
       >
+{/* 
+<img href='https://d4p17acsd5wyj.cloudfront.net/shortcuts/top_eats.png'></img> */}
+
         <Grid container item xs={2} style={{
           height: "fit-content",
-          paddingTop: '20px'
+          
         }}>
+          <h2 style={{paddingBottom:'20px', paddingLeft:'10px'}}>All Stores</h2>
           <Grid container item>
             <FormControl component="fieldset">
               <FormLabel component="legend">Choose delivery option</FormLabel>
@@ -474,6 +484,22 @@ const Home = () => {
               </RadioGroup>
             </FormControl>
 
+          </Grid>
+          <Grid >
+           <p style={{paddingTop: '50px'}}>Max delivery fee</p> 
+          <Box sx={{ width: 180 }}>
+      <Slider
+        aria-label="Delivery"
+        defaultValue={6}
+        step={2}
+        marks
+        min={1}
+        max={10}
+        valueLabelDisplay='auto'
+        style={{color:'black'}}
+      />
+     
+    </Box>
           </Grid>
           <Grid container item style={{paddingTop: '50px'}}>
 
@@ -561,34 +587,5 @@ const Home = () => {
 
 export default Home;
 
-//Sidebar
 
-const drawerWidth = 240;
 
-const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
-  ({ theme, open }) => ({
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: `-${drawerWidth}px`,
-    ...(open && {
-      transition: theme.transitions.create("margin", {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      marginLeft: 0,
-    }),
-  })
-);
-
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-  justifyContent: "flex-end",
-}));

@@ -25,11 +25,20 @@ function Register(){
             console.log("------",regAdmin)
             const res = await axios.post("/customer/api/register/",regAdmin);
             console.log("response", res);
-            dispatch(register({
-                email: res.data.email,
-                signedIn: true, 
-            }))
-            history.push("/clogin");
+            if(res.status == 200) {
+                dispatch(register({
+                    email: res.data.email,
+                    signedIn: true, 
+                }))
+                history.push("/clogin");  
+                }
+         
+            else {
+                console.log("error",res.data.message);
+                console.log("incatch")
+                setError(res.data.message)
+            }
+            
         }catch(err){
             console.log("error",err.response.data.message);
             console.log("incatch")

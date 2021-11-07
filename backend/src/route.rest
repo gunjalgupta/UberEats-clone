@@ -17,3 +17,13 @@ Content-Type: application/json
     "pwd": "1234"
 }
 ###
+POST http://localhost:5000/restaurant/api/register/
+Content-Type: application/json
+
+{
+    "rname":"gunjalnew",
+    "email": "web",
+    "pwd": "1234"
+}
+###
+POST http://localhost:5000/customer/api/fetchaddress/3

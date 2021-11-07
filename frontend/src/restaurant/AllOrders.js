@@ -24,6 +24,8 @@ import {  useHistory } from 'react-router-dom'
 import axios from "axios";
 import LaunchIcon from '@mui/icons-material/Launch';
 
+import RestaurantSidebar from '../components/RestaurantSidebar';
+import { Menu, LocationOn} from "@mui/icons-material";
 
 
 
@@ -172,10 +174,11 @@ function AllOrders() {
         <div className="header__upper">
            <div className="header__upperheader"  style={{backgroundColor:headbg,boxShadow:shadow}}   >
              <div className="header__upperheaderleft">
-             <Link to='/rhome'>
+             <Menu /><RestaurantSidebar/>
+             {/* <Link to='/rhome'>
                 <img
                     src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg "
-                     alt="uber eats" /></Link>
+                     alt="uber eats" /></Link> */}
             </div>
             {/* <div className="header__upperheadercenter"   >
                <LocationOn />

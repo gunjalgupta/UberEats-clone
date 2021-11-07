@@ -7,8 +7,16 @@ import { useState } from "react";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import ReactDOM from "react-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { addCart,removeCart } from "../actions/cartActions";
 
 function Dishes({ dname, des, ing, imageKey, price, id , restaurantId,rname}) {
+
+
+  const dispatch= useDispatch();
+  const user = useSelector((state) => state.user);
+  const cartt= useSelector((state) => state.cart);
+  const order = useSelector((state)=>state.order)
   const [dish, setdish] = useState([]);
   const [dish1, setdish1] = useState([]);
   let [counter, setcounter] = useState(0);
@@ -47,33 +55,42 @@ function Dishes({ dname, des, ing, imageKey, price, id , restaurantId,rname}) {
   const addToCart = (dishId, quantity,dname,price) => {
     //console.log("here",dishId)
     const subtotal= quantity*price
-    if (localStorage.getItem('order')) {
+    if (order.order) {
       //console.log("in order",restaurantId, JSON.parse(localStorage.getItem('rescartid')).restaurantId)
       if (localStorage.getItem('rescartid')){
-        console.log("in order",restaurantId, JSON.parse(localStorage.getItem('rescartid'))[0].restaurantId, JSON.parse(localStorage.getItem('order')).restaurantId)
+        console.log("in order",restaurantId, JSON.parse(localStorage.getItem('rescartid'))[0].restaurantId, order.order.restaurantId)
       if (JSON.parse(localStorage.getItem('rescartid'))[0].restaurantId=== restaurantId) {
         
-        console.log("in cart",restaurantId, JSON.parse(localStorage.getItem('order')).restaurantId)
-        if(localStorage.getItem("cart")) { 
-        localStorage.setItem(
-          "cart",
-          JSON.stringify([
-            ...JSON.parse(localStorage.getItem("cart")),
-            { dishId: dishId, dname:dname, quantity: quantity, Price: price, subtotal: subtotal,rname:rname  },
-          ])
-        )
+        console.log("in cart",restaurantId, order.order.restaurantId)
+        if(cartt.cart){ 
+        // localStorage.setItem(
+        //   "cart",
+        //   JSON.stringify([
+        //     ...JSON.parse(localStorage.getItem("cart")),
+        //     { dishId: dishId, dname:dname, quantity: quantity, Price: price, subtotal: subtotal,rname:rname  },
+        //   ])
+        // )
+        dispatch(addCart( { dishId: dishId, dname:dname, quantity: quantity, Price: price, subtotal: subtotal,rname:rname  }
+          ))
+
         localStorage.setItem(
           "rescartid",
           JSON.stringify([
             { restaurantId: restaurantId},
           ])
-        )} else { 
-        localStorage.setItem(
-          "cart",
-          JSON.stringify([
-            { dishId: dishId, dname:dname, quantity: quantity, Price: price, subtotal: subtotal,rname:rname },
-          ])
         )
+
+      } else { 
+        // localStorage.setItem(
+        //   "cart",
+        //   JSON.stringify([
+        //     { dishId: dishId, dname:dname, quantity: quantity, Price: price, subtotal: subtotal,rname:rname },
+        //   ]))
+          
+            dispatch(addCart({ dishId: dishId, dname:dname, quantity: quantity, Price: price, subtotal: subtotal,rname:rname }
+              ))
+              
+        
         localStorage.setItem(
           "rescartid",
           JSON.stringify([
@@ -100,12 +117,15 @@ function Dishes({ dname, des, ing, imageKey, price, id , restaurantId,rname}) {
       //   )
       // }
       // else {
-        localStorage.setItem(
-          "cart",
-          JSON.stringify([
-            { dishId: dishId, dname:dname, quantity: quantity, Price: price, subtotal: subtotal ,rname:rname},
-          ])
-        )
+        // localStorage.setItem(
+        //   "cart",
+        //   JSON.stringify([
+        //     { dishId: dishId, dname:dname, quantity: quantity, Price: price, subtotal: subtotal ,rname:rname},
+        //   ])
+        // )
+        dispatch( addCart({ dishId: dishId, dname:dname, quantity: quantity, Price: price, subtotal: subtotal ,rname:rname}
+         
+      )  )
         localStorage.setItem(
           "rescartid",
           JSON.stringify([
@@ -119,12 +139,14 @@ function Dishes({ dname, des, ing, imageKey, price, id , restaurantId,rname}) {
 
   const newOrder=(dishId, quantity,dname,subtotal,price)=>{
     
-    localStorage.setItem(
-      "cart",
-      JSON.stringify([
-        { dishId: dishId, dname:dname, quantity: quantity, Price: price, subtotal: subtotal,rname:rname },
-      ])
-    )
+    // localStorage.setItem(
+    //   "cart",
+    //   JSON.stringify([
+    //     { dishId: dishId, dname:dname, quantity: quantity, Price: price, subtotal: subtotal,rname:rname },
+    //   ])
+    // )
+    dispatch(addCart( { dishId: dishId, dname:dname, quantity: quantity, Price: price, subtotal: subtotal,rname:rname }
+      ))
     localStorage.setItem(
       "rescartid",
       JSON.stringify([
@@ -380,40 +402,7 @@ function Dishes({ dname, des, ing, imageKey, price, id , restaurantId,rname}) {
             )}
           </Grid>
         </Grid>
-        {/* <Box sx={{ maxWidth: 345, minWidth: 345 }}>
-          <CardContent
-            sx={{ flex: "1 0 auto" }}
-            onClick={() => {
-              toggle();
-              setdish({ dname, des, ing, imageKey, price });
-            }}
-          >
-            <Typography component="div" variant="h5">
-              {dname}
-            </Typography>
-            <Typography
-              variant="subtitle1"
-              color="text.secondary"
-              component="div"
-            >
-              {des}
-              <br />
-              Ingredients: {ing}
-            </Typography>
-          </CardContent>
-          <Box sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}>
-            Price ${price}
-          </Box>
-        </Box>
-        {imageKey && (
-          <CardMedia
-            className="media"
-            component="img"
-            sx={{ width: 151 }}
-            image={`http://localhost:8081/images/${imageKey}`}
-            alt="Live from space album cover"
-          />
-        )} */}
+        
       </Card>
     </div>
   );

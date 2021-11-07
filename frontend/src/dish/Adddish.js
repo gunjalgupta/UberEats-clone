@@ -9,6 +9,7 @@ import {
 } from "@mui/icons-material";
 import Center from "../Center";
 import axios from 'axios';
+import RestaurantSidebar from '../components/RestaurantSidebar';
 //import './Adddish.css'
 
 const Adddish = () => {
@@ -111,13 +112,13 @@ const Adddish = () => {
           style={{ backgroundColor: headbg, boxShadow: shadow }}
         >
           <div className="header__upperheaderleft">
-            <Menu />
-            <a href="/rhome">
+            <Menu /><RestaurantSidebar/>
+            {/* <a href="/rhome">
               <img
                 src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg "
                 alt="uber eats"
               />
-            </a>
+            </a> */}
           </div>
           {/* <div className="header__upperheadercenter"   >
            <LocationOn />

@@ -1,6 +1,11 @@
 import React, { useState, useEffect} from "react";
 
 import { Link } from "react-router-dom";
+import {
+  
+  Menu,
+  LocationOn,
+} from "@mui/icons-material";
 import { Grid} from "@material-ui/core";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -18,7 +23,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "../actions/userActions";
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
-import { LocationOn} from "@mui/icons-material";
+import CustomerSidebar from "../components/CustomerSidebar"
 
 
 const Pastorders = () => {
@@ -219,12 +224,14 @@ const Pastorders = () => {
           style={{ backgroundColor: headbg, boxShadow: shadow }}
         >
           <div className="header__upperheaderleft">
-            <Link to="/chome">
-              <img
-                src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg "
-                alt="uber eats"
-              />{" "}
-            </Link>
+           
+            <Menu
+              style={{
+                marginRight: "30px",
+              }}
+            />
+
+            <CustomerSidebar/>
           </div>
 
           <div className="header__upperheadercenter"   >

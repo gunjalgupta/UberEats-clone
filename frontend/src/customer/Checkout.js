@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect, useReducer} from "react";
 
 import { Link } from "react-router-dom";
 import { Grid, TextField } from "@material-ui/core";
@@ -11,14 +11,25 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import { useDispatch } from "react-redux";
+import { useDispatch , useSelector} from "react-redux";
 import { logout } from "../actions/userActions";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CustomerSidebar from "../components/CustomerSidebar"
+import {
+  
+  Menu,
+  LocationOn,
+} from "@mui/icons-material";
+import { placeOrder } from "../actions/orderActions";
+import { removeCart ,orderPlaced} from "../actions/cartActions";
 
 const Checkout = () => {
   const history= useHistory();
   const dispatch= useDispatch();
+  const orderr= useSelector((state)=>state.order);
+  const user=useSelector((state)=>state.user);
+  const cartt= useSelector((state)=>state.cart);
   const [headbg, setheadbg] = useState("transparent");
   const [shadow, setshadow] = useState("none");
   const [currentAddress, setCurrentAddress] = useState("")
@@ -26,7 +37,7 @@ const Checkout = () => {
   const [savedAddress, setSavedAddress]= useState([]);
   const [value, setValue] = useState("pickup");
   const [address, setAddress] = useState({
-    customerId: JSON.parse(localStorage.getItem("customer")).customerId,
+    customerId: user.user.customerId,
     addline1: "",
     addline2: "",
     city: "",
@@ -86,7 +97,7 @@ const Checkout = () => {
   } 
     
     else{
-    const order = JSON.parse(localStorage.getItem("order"));
+    const order = orderr.order
     const restId = JSON.parse(localStorage.getItem("rescartid"))[0];
     axios
       .post("/orders/api/addorder", {
@@ -95,7 +106,7 @@ const Checkout = () => {
         invoiceId: order.invoiceId,
         total: order.total,
         mode: mode,
-        rname:JSON.parse(localStorage.getItem("cart"))[0].rname,
+        rname:cartt.cart[0].rname,
       })
       .then((response) => {
         //console.log("res", response);
@@ -111,7 +122,7 @@ const Checkout = () => {
          
         }
         const dishesToPass = [];
-        order.dishes.map((dish) => {
+        cartt.cart.map((dish) => {
           console.log(order.invoiceId);
           dishesToPass.push({
             invoiceId: order.invoiceId,
@@ -141,12 +152,13 @@ const Checkout = () => {
           progress: undefined,
           });
         localStorage.removeItem("cart",null);
+        dispatch(orderPlaced());
         localStorage.removeItem("rescartid",null);
         localStorage.removeItem("order",null);
+        dispatch(placeOrder())
         const timeout = setTimeout(() => {
           history.push("/chome");
         }, 3000);
-        //history.push("/chome")
       })
   }};
 
@@ -177,7 +189,7 @@ const Checkout = () => {
   };
 
   useEffect(() => {
-    const customerId =  JSON.parse(localStorage.getItem("customer")).customerId;
+    const customerId =  user.user.customerId;
     axios.post(`/customer/api/fetchaddress/${customerId}`,{})
     .then(response => {
         
@@ -207,12 +219,19 @@ const Checkout = () => {
             style={{ backgroundColor: headbg, boxShadow: shadow }}
           >
             <div className="header__upperheaderleft">
-              <Link to="/chome">
+              {/* <Link to="/chome">
                 <img
                   src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg "
                   alt="uber eats"
                 />{" "}
-              </Link>
+              </Link> */}
+              <Menu
+              style={{
+                marginRight: "30px",
+              }}
+            />
+
+            <CustomerSidebar/>
             </div>
 
             {/* <div className="header__upperheadercenter"   >
@@ -246,7 +265,8 @@ const Checkout = () => {
           }}
         >
           <Grid container xs={12} style={{display:'flex', justifyContent:'center',  paddingTop: "0px",fontSize:32}}>
-          {JSON.parse(localStorage.getItem("cart"))[0].rname}
+          {cartt.cart[0].rname
+          }
                 </Grid>
           <table
             style={{
@@ -258,8 +278,8 @@ const Checkout = () => {
             <th>Quantity</th>
             <th>Subtotal</th>
           </tr> 
-          {localStorage.getItem("cart") &&
-            JSON.parse(localStorage.getItem("cart")).map((dish) => (
+          {cartt.cart&&
+            cartt.cart.map((dish) => (
               <tr>
                 <td>{dish.dname}</td>
                 <td>{dish.quantity}</td>
@@ -273,7 +293,8 @@ const Checkout = () => {
               Total Price
             </Grid>
             <Grid container xs={4}>
-              {JSON.parse(localStorage.getItem("order")).total}
+              {orderr.order.total
+              }
             </Grid>
           </Grid>
         

@@ -5,27 +5,14 @@ import axios from 'axios';
 import Dish from '../components/Resdishes'
 import { useHistory } from 'react-router-dom'
 import Grid from '@mui/material/Grid';
-import { Menu, LocationOn} from "@mui/icons-material";
 import './Home.css'
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { useDispatch } from "react-redux";
 import { logoutRestaurant } from "../actions/resActions";
 import { styled,useTheme } from "@mui/material/styles";
-import Drawer from "@mui/material/Drawer";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import ReceiptIcon from '@mui/icons-material/Receipt';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-
+import RestaurantSidebar from '../components/RestaurantSidebar';
+import { Menu, LocationOn} from "@mui/icons-material";
 const Home =()=>{
 
     const history = useHistory()
@@ -151,16 +138,10 @@ const deleteDish =  (id) =>{
         <div className="header__upper">
            <div className="header__upperheader"  style={{backgroundColor:headbg,boxShadow:shadow}}   >
              <div className="header__upperheaderleft">
-                <Menu onClick={handleDrawerOpen}></Menu>
-                <Link to='/rhome'>
-                <img
-                    src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg "
-                     alt="uber eats" /></Link>
+                <Menu /><RestaurantSidebar/>
+               
             </div>
-            {/* <div className="header__upperheadercenter"   >
-               <LocationOn />
-               <input type="text" placeholder="What are you craving? " />
-            </div> */}
+            
             <div className="header__upperheadercenter">
             <LocationOn />
             <input
@@ -172,81 +153,14 @@ const deleteDish =  (id) =>{
             <div className="header__upperheaderright" onClick={signout}>
                  <p> Sign out </p>
             </div>
-            {/* <div className="header__upperheaderright">
-                 <p> Add dishes </p>
-            </div> */}
+           
            </div>
         
            
         </div>
         
-        <Drawer
-          sx={{
-            width: drawerWidth,
-            flexShrink: 0,
-            // "& .MuiDrawer-paper": {
-            //   width: drawerWidth,
-            //   boxSizing: "border-box",
-            // },
-          }}
-          variant="persistent"
-          anchor="left"
-          open={open}
-        >
-          <DrawerHeader>
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === "ltr" ? (
-                <ChevronLeftIcon />
-              ) : (
-                <ChevronRightIcon />
-              )}
-            </IconButton>
-            <img
-                src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg "
-                alt="uber eats"
-              />
-          </DrawerHeader>
-          <Divider />
-          <List>
-          <ListItem >
-          
-                <ListItemIcon>
-                <Link to ='./rprofile' style={{color:'black',}}>
-                 <AccountBoxIcon /> </Link>  
-                </ListItemIcon> 
-                <ListItemText> <Link to ='./rprofile' style={{textDecoration:'none', color:"black"}}>  View profile </Link></ListItemText>
-              </ListItem>
-        <ListItem >
-          
-                <ListItemIcon>
-                <Link to ='./rprofile' style={{color:'black',}}>
-                 <AssignmentIndIcon />   
-                 </Link>  
-                </ListItemIcon> 
-                <ListItemText> <Link to ='./rprofile' style={{textDecoration:'none', color:"black"}}>  Update profile </Link></ListItemText>
-              </ListItem>
-              <ListItem >
-           
-                <ListItemIcon>
-                <Link to ='./adddish' style={{color:'black',}}> 
-                 <AddBoxIcon />  </Link>
-                </ListItemIcon> 
-                <ListItemText>  <Link to ='./adddish' style={{textDecoration:'none', color:"black"}}>  Add dishes </Link></ListItemText>
-              </ListItem>
-              <ListItem >
-          
-                <ListItemIcon>
-                <Link to ='./allorders' style={{color:'black',}}> 
-                 <ReceiptIcon />  </Link> 
-                </ListItemIcon> 
-                <ListItemText>  <Link to ='./allorders' style={{textDecoration:'none', color:"black"}}>   Orders</Link></ListItemText>
-              </ListItem>
-          </List>
-          <Divider />
-        </Drawer>
-        {/* <Main open={open}>
-        <DrawerHeader />
-      </Main> */}
+
+        
         
         
         <div className = 'dish_home' style={{marginTop:100, marginLeft: 0, display:"flex"}}>

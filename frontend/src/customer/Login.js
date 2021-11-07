@@ -24,7 +24,7 @@ function Login() {
             console.log("------",loginAdmin)
             console.log("local", localStorage.getItem('token'))
             const res = await axios.post("/customer/api/login",loginAdmin)
-            console.log("------",res.status)
+            console.log("------",res)
         localStorage.setItem('customer', JSON.stringify(res.data));
         localStorage.setItem('token', res.data.token);
         if(res.status == 200) {
@@ -38,6 +38,12 @@ function Login() {
             
             
             }
+     
+        else {
+            console.log("error",res.data.message);
+            console.log("incatch")
+            setError(res.data.message)
+        }
         }
             //console.log("response", res);
         catch(err){

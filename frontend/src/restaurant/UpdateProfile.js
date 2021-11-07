@@ -15,6 +15,8 @@ import { logoutRestaurant } from "../actions/resActions";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import RestaurantSidebar from '../components/RestaurantSidebar';
+import { Menu, LocationOn} from "@mui/icons-material";
 
 const UpdateProfile = () => {
     const history = useHistory()
@@ -84,13 +86,13 @@ const UpdateProfile = () => {
                     <div className="header__upper">
                 <div className="header__upperheader"  style={{backgroundColor:headbg,boxShadow:shadow}}   >
                   <div className="header__upperheaderleft">
-                    
-                  <Link to="/rhome">
+                    <Menu/><RestaurantSidebar/>
+                  {/* <Link to="/rhome">
                  <img
                     src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg "
                      alt="uber eats"
                    />{" "}
-                 </Link>
+                 </Link> */}
                  </div>
                  {/* <div className="header__upperheadercenter"   >
                  

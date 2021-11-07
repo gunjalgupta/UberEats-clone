@@ -37,6 +37,11 @@ function Login() {
                 }))
               history.push("/rhome")
             }
+            else{
+                console.log("error",res.data.message);
+                console.log("incatch")
+                setError(res.data.message)
+            }
             //console.log("response", res);
         }catch(err){
             console.log(err);

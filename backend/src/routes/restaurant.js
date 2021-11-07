@@ -12,15 +12,10 @@ router.post("/api/register", (req, res) => {
 	req.body.path = "register";
 	kafka.make_request("rsignup", req.body, (err, result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			res.status(500).send({message:"Server Error"})
 		} else if (result === 299) {
-			res.writeHead(299, {
-				"Content-Type": "text/plain",
-			});
-			res.end("EMAIL_EXIST");
+			
+			res.status(299).send({message:"Acoount with this email already exists"})
 		} else {
 			const payload = { _id: result.userid };
 			const token = jwt.sign(payload, secret, {
@@ -45,20 +40,13 @@ router.post("/api/login", (req, res) => {
 			console.log(err);
 		} else {
 			if (result === 500) {
-				res.writeHead(500, {
-					"Content-Type": "text/plain",
-				});
-				res.end("SERVER_ERROR");
+				res.status(500).send({message:"Server Error"})
 			} else if (result === 207) {
-				res.writeHead(207, {
-					"Content-Type": "text/plain",
-				});
-				res.end("NO_USER");
+				
+				res.status(207).send({message:"Account not found"})
 			} else if (result === 209) {
-				res.writeHead(209, {
-					"Content-Type": "text/plain",
-				});
-				res.end("INCORRECT_PASSWORD");
+				
+				res.status(500).send({message:"Incorrect Password"})
 			} else {
 				const payload = { _id: result._id };
 				const token = jwt.sign(payload, secret, {
@@ -87,10 +75,7 @@ router.get("/api/profile/:restaurantId", (req, res) => {
 
 	kafka.make_request("rsignup", req.body, (err,result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			res.status(500).send({message:"Server Error"})
 		} else {
 			res.writeHead(200, {
 				"Content-Type": "text/plain",
@@ -107,10 +92,7 @@ router.post("/api/profile/updatedetails/", (req, res) => {
 
 	kafka.make_request("rsignup", req.body, (err,result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			res.status(500).send({message:"Server Error"})
 		} else {
 			res.writeHead(200, {
 				"Content-Type": "text/plain",
@@ -129,10 +111,7 @@ router.post("/api/getdish/:restaurantId", (req, res) => {
 
 	kafka.make_request("rsignup", req.body, (err,result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			res.status(500).send({message:"Server Error"})
 		} else {
 			res.writeHead(200, {
 				"Content-Type": "text/plain",
@@ -151,10 +130,7 @@ router.post("/api/adddish/", (req, res) => {
 
 	kafka.make_request("rsignup", req.body, (err,result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			res.status(500).send({message:"Server Error"})
 		} else {
 			res.writeHead(200, {
 				"Content-Type": "text/plain",
@@ -173,10 +149,7 @@ router.post("/api/editdish/:dishId", (req, res) => {
 
 	kafka.make_request("rsignup", req.body, (err,result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			res.status(500).send({message:"Server Error"})
 		} else {
 			res.writeHead(200, {
 				"Content-Type": "text/plain",
@@ -194,10 +167,7 @@ router.post("/api/deletedish/:dishId", (req, res) => {
 
 	kafka.make_request("rsignup", req.body, (err,result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			res.status(500).send({message:"Server Error"})
 		} else {
 			res.writeHead(200, {
 				"Content-Type": "text/plain",
@@ -216,10 +186,7 @@ router.post("/api/getd/:dishId/:restaurantId", (req, res) => {
 
 	kafka.make_request("rsignup", req.body, (err,result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			res.status(500).send({message:"Server Error"})
 		} else {
 			res.writeHead(200, {
 				"Content-Type": "text/plain",
@@ -235,10 +202,7 @@ router.post("/api/key/", (req, res) => {
 	req.body.path = "restaurantFindKey";
 	kafka.make_request("rsignup", req.body, (err,result) => {
 		if (result === 500) {
-			res.writeHead(500, {
-				"Content-Type": "text/plain",
-			});
-			res.end("SERVER_ERROR");
+			res.status(500).send({message:"Server Error"})
 		} else {
 			res.writeHead(200, {
 				"Content-Type": "text/plain",

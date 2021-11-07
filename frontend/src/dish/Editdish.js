@@ -8,6 +8,7 @@ import { Menu } from "@mui/icons-material";
 import Showprofile from "./Showprofile";
 import Profilepic from "./Profilepic";
 import Center from "../Center";
+import RestaurantSidebar from '../components/RestaurantSidebar';
 //import './Adddish.css'
 
 const Editdish = () => {
@@ -63,11 +64,7 @@ const Editdish = () => {
           style={{ backgroundColor: headbg, boxShadow: shadow }}
         >
           <div className="header__upperheaderleft">
-            <Menu />
-            <img
-              src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg "
-              alt="uber eats"
-            />
+            <Menu /><RestaurantSidebar/>
           </div>
           {/* <div className="header__upperheadercenter"   >
            <LocationOn />

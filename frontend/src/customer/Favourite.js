@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CustomerSidebar from "../components/CustomerSidebar"
 
 const Favourite= function (){
 
@@ -72,12 +73,10 @@ const Favourite= function (){
         <div className="header__upper">
                 <div className="header__upperheader"  style={{backgroundColor:headbg,boxShadow:shadow}}   >
                   <div className="header__upperheaderleft">
-                     <Menu />
-                     <a  href = "/chome">
-                     <img
-                         src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg "
-                          alt="uber eats" />
-                          </a>
+                     <Menu /> 
+
+            <CustomerSidebar/>
+                   
                  
                  </div>
 

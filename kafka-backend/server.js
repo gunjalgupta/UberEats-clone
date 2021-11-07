@@ -22,7 +22,7 @@ require("./models/subscriber");
 require("./models/customer");
 console.log(envv);
 
-var authService = require("./services/authService.js");
+//var authService = require("./services/authService.js");
 var csignup = require("./services/csignup.js");
 var rsignup = require("./services/rsignup.js");
 var dish = require("./services/dish.js");
@@ -83,7 +83,7 @@ function response(data, res, producer) {
 }
 
 
-handleTopicRequest("getTopic", authService);
+//handleTopicRequest("getTopic", authService);
 handleTopicRequest("csignup", csignup );
 handleTopicRequest("rsignup", rsignup );
 handleTopicRequest("dish", dish );

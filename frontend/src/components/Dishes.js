@@ -8,17 +8,23 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import ReactDOM from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addCart,removeCart } from "../actions/cartActions";
+import { addCart,removeCart, orderPlaced } from "../actions/cartActions";
+import bcrypt from 'bcryptjs';
 
 function Dishes({ dname, des, ing, imageKey, price, id , restaurantId,rname}) {
 
 
+  id = String(id)
+  const cartId = bcrypt.hashSync(id,10);
   const dispatch= useDispatch();
   const user = useSelector((state) => state.user);
   const cartt= useSelector((state) => state.cart);
   const order = useSelector((state)=>state.order)
+  const custId = String(user.user.customerId)
+  const invoiceId = bcrypt.hashSync(custId,10);
   const [dish, setdish] = useState([]);
   const [dish1, setdish1] = useState([]);
+  const [message, setMessage] = useState();
   let [counter, setcounter] = useState(0);
 
   const increment = () => {
@@ -52,8 +58,57 @@ function Dishes({ dname, des, ing, imageKey, price, id , restaurantId,rname}) {
     };
   };
 
+  function addtocartt(dishId, quantity,dname,price){
+    console.log("Inside add to cart")
+    //setOpen(false);
+    let flag = false;
+    const quant = parseInt(quantity,10)
+    const subtotal= quantity*price
+    // const cart = {
+    //   customerId : user.user.customerId,
+    //   dishId: dishId,
+    //   resturantId: restaurantId,
+    //   quantity: quant
+    // }
+    console.log(cartt.cart)
+    if(cartt.cart.length != 0){
+      console.log("Inside basket lenfth");
+      cartt.cart.forEach(element => {
+        if(Number(element.restaurantId) != Number(restaurantId))
+          flag = true
+          setMessage("Dish cannot be added")
+          console.log(element.restaurantId)
+          console.log(restaurantId)
+      })
+    }
+      if(!flag){
+        console.log("Inside else")
+        dispatch(addCart( { dishId: dishId,
+          dname:dname, 
+          quantity: quantity, 
+          Price: price, 
+          subtotal: subtotal,
+          rname:rname ,
+          customerId : user.user.customerId,
+          restaurantId: restaurantId,
+          cartId: cartId,
+          imageKey : imageKey,
+          invoiceId: invoiceId}
+          ))
+      
+      } else {
+        toggle()
+      console.log(isShowing1)
+      console.log(isShowing)
+      toggle1();
+      setdish1({ dishId, dname, quantity, price,subtotal});
+      }
+  }
+
   const addToCart = (dishId, quantity,dname,price) => {
     //console.log("here",dishId)
+    console.log("Inside add to cart")
+    
     const subtotal= quantity*price
     if (order.order) {
       //console.log("in order",restaurantId, JSON.parse(localStorage.getItem('rescartid')).restaurantId)
@@ -107,22 +162,7 @@ function Dishes({ dname, des, ing, imageKey, price, id , restaurantId,rname}) {
     }
     } else 
       {
-      //   if((localStorage.getItem('cart'))) {
-      //   localStorage.setItem(
-      //     "cart",
-      //     JSON.stringify([
-      //       ...JSON.parse(localStorage.getItem("cart")),
-      //       { dishId: dishId, dname:dname, quantity: quantity, Price: price, subtotal: subtotal, rname:rname },
-      //     ])
-      //   )
-      // }
-      // else {
-        // localStorage.setItem(
-        //   "cart",
-        //   JSON.stringify([
-        //     { dishId: dishId, dname:dname, quantity: quantity, Price: price, subtotal: subtotal ,rname:rname},
-        //   ])
-        // )
+   
         dispatch( addCart({ dishId: dishId, dname:dname, quantity: quantity, Price: price, subtotal: subtotal ,rname:rname}
          
       )  )
@@ -145,7 +185,21 @@ function Dishes({ dname, des, ing, imageKey, price, id , restaurantId,rname}) {
     //     { dishId: dishId, dname:dname, quantity: quantity, Price: price, subtotal: subtotal,rname:rname },
     //   ])
     // )
-    dispatch(addCart( { dishId: dishId, dname:dname, quantity: quantity, Price: price, subtotal: subtotal,rname:rname }
+    const quant = parseInt(quantity,10)
+    
+    dispatch(orderPlaced());
+
+    dispatch(addCart( { dishId: dishId,
+      dname:dname, 
+      quantity: quant, 
+      Price: price, 
+      subtotal: subtotal,
+      rname:rname ,
+      customerId : user.user.customerId,
+      restaurantId: restaurantId,
+      cartId: cartId,
+      imageKey : imageKey,
+      invoiceId: invoiceId}
       ))
     localStorage.setItem(
       "rescartid",
@@ -249,7 +303,7 @@ function Dishes({ dname, des, ing, imageKey, price, id , restaurantId,rname}) {
                   style={{ marginLeft: 30 }}
                   onClick={() => 
                     
-                    addToCart(id, counter,dname,price)
+                    addtocartt(id, counter,dname,price)
                 
                   }
                   disabled={counter===0}

@@ -2,7 +2,6 @@ import {combineReducers} from "@reduxjs/toolkit";
 import userReducer from "../features/userReducer";
 import resReducer from "../features/restaurantReducer"
 import cartReducer from "../features/cartReducer"
-import orderReducer from "../features/orderReducer"
 import {persistStore, persistReducer} from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import {createStore, applyMiddleware} from "redux";
@@ -13,7 +12,7 @@ const rootReducer = combineReducers({
     user:userReducer,
     restaurant: resReducer,
     cart:cartReducer,
-    order: orderReducer
+   
 });
 
 const persistConfig = {key : "root", storage};

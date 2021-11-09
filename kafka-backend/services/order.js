@@ -132,13 +132,12 @@ function addorder(message, callback) {
 //==================================================
 function addorderDetails(message, callback) {
 	console.log("inside handle req", message);
-	let invoiceId = message.invoiceId;
-	console.log("EmailId is:", invoiceId);
+	
 
-	message.values.map((orderd)=>{
-        Order.updateOne({invoiceId:orderd.invoiceId}, {
+	//message.values.map((orderd)=>{
+        Order.updateOne({invoiceId:message.values[0].invoiceId}, {
             $addToSet:{
-                orderdetails: orderd
+                orderdetails: message.values
             }
         }, (err, user)=>{
             console.log("user from DB", user);
@@ -151,7 +150,7 @@ function addorderDetails(message, callback) {
             }
         })
 
-    })
+    //})
    
 
 }

@@ -5,10 +5,10 @@ export function addCart(payload){
     }
 }
 
-export function removeCart(payload){
+export function removeCart(id){
     return {
         type: "REMOVE_CART",
-        payload
+        id
     }
 }
 

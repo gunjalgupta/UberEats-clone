@@ -21,13 +21,11 @@ import {
   Menu,
   LocationOn,
 } from "@mui/icons-material";
-import { placeOrder } from "../actions/orderActions";
 import { removeCart ,orderPlaced} from "../actions/cartActions";
 
 const Checkout = () => {
   const history= useHistory();
   const dispatch= useDispatch();
-  const orderr= useSelector((state)=>state.order);
   const user=useSelector((state)=>state.user);
   const cartt= useSelector((state)=>state.cart);
   const [headbg, setheadbg] = useState("transparent");
@@ -44,30 +42,8 @@ const Checkout = () => {
     state: "",
     zipcode: "",
   });
+  var _ = require('lodash');
 
-  // const savedAddress = [
-  //   {
-  //     line1: "1",
-  //     line2: "2",
-  //     city: "SJ",
-  //     state: "CA",
-  //     zip: "231",
-  //   },
-  //   {
-  //     line1: "3",
-  //     line2: "4",
-  //     city: "as",
-  //     state: "Aus",
-  //     zip: "q2",
-  //   },
-  //   {
-  //     line1: "6",
-  //     line2: "7",
-  //     city: "sf",
-  //     state: "sdf",
-  //     zip: "234",
-  //   },
-  // ];
 
   window.addEventListener("scroll", () => {
     if (window.scrollY >= 50) {
@@ -97,19 +73,22 @@ const Checkout = () => {
   } 
     
     else{
-    const order = orderr.order
-    const restId = JSON.parse(localStorage.getItem("rescartid"))[0];
+    const cart= cartt.cart
+    const restId = Number(cart[0].restaurantId);
+    console.log(restId)
+    console.log(cart[0].restaurantId)
+    console.log(cart[0])
     axios
       .post("/orders/api/addorder", {
-        customerId: order.customerId,
-        restaurantId: restId.restaurantId,
-        invoiceId: order.invoiceId,
-        total: order.total,
+        customerId: cart[0].customerId,
+        restaurantId: Number(cart[0].restaurantId),
+        invoiceId: cart[0].invoiceId,
+        total: _.sumBy(cartt.cart, (dish) => dish.subtotal),
         mode: mode,
-        rname:cartt.cart[0].rname,
+        rname:cart[0].rname,
       })
       .then((response) => {
-        //console.log("res", response);
+        console.log("res", response);
         if (response.data.error) {
           console.log("res", response);
           M.toast({
@@ -118,14 +97,14 @@ const Checkout = () => {
           });
         } else {
           //setcustomerData(response.data[0])
-          console.log(response.data);
+          console.log("order",response.data);
          
         }
         const dishesToPass = [];
-        cartt.cart.map((dish) => {
-          console.log(order.invoiceId);
+        cart.map((dish) => {
+          //console.log(order.invoiceId);
           dishesToPass.push({
-            invoiceId: order.invoiceId,
+            invoiceId: dish.invoiceId,
             dishId: dish.dishId,
             quantity: dish.quantity,
             price: dish.Price,
@@ -135,7 +114,7 @@ const Checkout = () => {
         });
         console.log("-----------",dishesToPass);
         axios.post("/orders/api/adddetails", dishesToPass).then((res)=>{
-          console.log(res)
+          console.log("orderdetail",res)
         }).catch((err)=>{
           console.log(err);
         })
@@ -155,7 +134,7 @@ const Checkout = () => {
         dispatch(orderPlaced());
         localStorage.removeItem("rescartid",null);
         localStorage.removeItem("order",null);
-        dispatch(placeOrder())
+       
         const timeout = setTimeout(() => {
           history.push("/chome");
         }, 3000);
@@ -202,6 +181,7 @@ const Checkout = () => {
                 console.log(response.data)
         }
     })
+    
   },[]);
 
   function signout(){
@@ -211,7 +191,7 @@ const Checkout = () => {
   }
 
   return (
-    <section className="section" id="about">
+    <div className="section" id="about">
       <div className="update">
         <div className="header__upper">
           <div
@@ -219,12 +199,7 @@ const Checkout = () => {
             style={{ backgroundColor: headbg, boxShadow: shadow }}
           >
             <div className="header__upperheaderleft">
-              {/* <Link to="/chome">
-                <img
-                  src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg "
-                  alt="uber eats"
-                />{" "}
-              </Link> */}
+              
               <Menu
               style={{
                 marginRight: "30px",
@@ -233,11 +208,6 @@ const Checkout = () => {
 
             <CustomerSidebar/>
             </div>
-
-            {/* <div className="header__upperheadercenter"   >
- 
-    <input type="text" placeholder="What are you craving? " />
- </div> */}
 
             <div className="header__upperheaderright" onClick={signout}>
               <p> Sign out </p>
@@ -265,7 +235,8 @@ const Checkout = () => {
           }}
         >
           <Grid container xs={12} style={{display:'flex', justifyContent:'center',  paddingTop: "0px",fontSize:32}}>
-          {cartt.cart[0].rname
+          {
+          cartt.cart[0]?cartt.cart[0].rname:"rname"
           }
                 </Grid>
           <table
@@ -293,7 +264,7 @@ const Checkout = () => {
               Total Price
             </Grid>
             <Grid container xs={4}>
-              {orderr.order.total
+              {cartt.cart[0]?_.sumBy(cartt.cart, (dish) => dish.subtotal):"total"
               }
             </Grid>
           </Grid>
@@ -446,7 +417,7 @@ pauseOnHover
           </Grid>
         </Grid>
       </Grid>
-    </section>
+    </div>
   );
 };
 export default Checkout;

@@ -31,6 +31,12 @@ const orderSchema = new mongoose.Schema({
   invoiceId:{
     type: String,
   },
+  message:{
+    type:String
+  },
+  address: {
+      type: String
+  },
   orderdetails:[{
   orderdetailsId:{
     type:Number,

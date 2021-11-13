@@ -32,6 +32,7 @@ const Checkout = () => {
   const [currentAddress, setCurrentAddress] = useState("")
   const [mode, setMode] = useState("pickup")
   const [savedAddress, setSavedAddress]= useState([]);
+  const [message, setMessage]= useState("");
   const [value, setValue] = useState("pickup");
   const [address, setAddress] = useState({
     customerId: user.user.customerId,
@@ -85,6 +86,8 @@ const Checkout = () => {
         total: _.sumBy(cartt.cart, (dish) => dish.subtotal),
         mode: mode,
         rname:cart[0].rname,
+        message:message,
+        address:currentAddress
       })
       .then((response) => {
         console.log("res", response);
@@ -266,6 +269,14 @@ const Checkout = () => {
               {cartt.cart[0]?_.sumBy(cartt.cart, (dish) => dish.subtotal):"total"
               }
             </Grid>
+          </Grid>
+          <Grid container item>
+          <Grid container xs={4}><p>Add special instructions: (optional)</p></Grid>
+            <Grid><form>
+                    <input type="text" placeholder="Instructions" onChange={(e) => setMessage(e.target.value)} value={message}></input>
+                    
+                </form></Grid>
+            
           </Grid>
         
             Mode of delivery:

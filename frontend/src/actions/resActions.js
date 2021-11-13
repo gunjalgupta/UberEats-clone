@@ -17,3 +17,15 @@ export function logoutRestaurant(){
         type:"LOGOUT_RESTAURANT"
     }
 }
+export function addingToken(payload) {
+    return {
+        type: "ADDING_TOKEN",
+        payload
+    }
+}
+
+export function removeToken() {
+    return {
+        type: "REMOVE_TOKEN"
+    }
+}

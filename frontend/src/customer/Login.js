@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import './Login.css';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../actions/userActions';
+import { login,addingToken } from '../actions/userActions';
 import { useHistory, Link } from 'react-router-dom';
 
 function Login() {
@@ -22,17 +22,21 @@ function Login() {
                 pwd,
             };
             console.log("------",loginAdmin)
-            console.log("local", localStorage.getItem('token'))
+            //console.log("local", localStorage.getItem('token'))
             const res = await axios.post("/customer/api/login",loginAdmin)
             console.log("------",res)
         localStorage.setItem('customer', JSON.stringify(res.data));
         localStorage.setItem('token', res.data.token);
         if(res.status == 200) {
+            dispatch(addingToken({
+                token:res.data.token,
+            }))
             dispatch(login({
                 email: res.data.email,
                 customerId: res.data.customerId,
                 name: res.data.name,
                 loggedIn: true, 
+                
             }))
           history.push("/chome")
             

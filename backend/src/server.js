@@ -6,11 +6,14 @@ const app = express()
 const mongoose = require('mongoose')
 
 const session = require("express-session");
+const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 //const multer = require("multer");
 
 const bcrypt = require("bcrypt");
+
+const passport= require("passport")
 
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
 const db = mongoose.connection
@@ -22,8 +25,11 @@ const PORT = process.env.PORT || 5000;
 
 // parse requests of content-type = application/json
 app.use(express.json());
+app.use(express.urlencoded());
 app.use(cookieParser());
 app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 //parse requests of content-type = application/x-www-form-urlencoded
 
 // // setting view engine
@@ -62,10 +68,14 @@ app.use(cors());
 // 	})
 // );
 
+
 app.use(express.static("./public"));
 
-const subscribersRouter = require('./routes/subscribers')
-app.use('/subscribers', subscribersRouter)
+app.use(session({secret:"secret"}))
+require("./passport")(passport)
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 const customersRouter = require('./routes/customer')
 app.use('/customer', customersRouter)
@@ -88,8 +98,6 @@ app.use('/orders', orderRouter)
 var server= app.listen(PORT, () => console.log(`Listening on port ${process.env.PORT}.`));
 
 
-
-console.log(envv);
 module.exports = app;
 
 module.exports =server;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer} from "react";
+import React, { useState, useEffect} from "react";
 
 import { Link } from "react-router-dom";
 import { Grid, TextField } from "@material-ui/core";
@@ -19,9 +19,8 @@ import CustomerSidebar from "../components/CustomerSidebar"
 import {
   
   Menu,
-  LocationOn,
 } from "@mui/icons-material";
-import { removeCart ,orderPlaced} from "../actions/cartActions";
+import { orderPlaced} from "../actions/cartActions";
 
 const Checkout = () => {
   const history= useHistory();

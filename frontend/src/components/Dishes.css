@@ -21,7 +21,7 @@
     top: 0;
     left: 0;
     z-index: 1040;
-    width: 100vw;
+    width: 80vw;
     height: 100vh;
     background-color: #000;
     opacity: .5;
@@ -38,21 +38,41 @@
     overflow-y: auto;
     outline: 0;
   }
+  .modal-overlay3 {
+    
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+    opacity: .5;
+    background-color: #000
+  }
+
+
   .modal {
     z-index: 100;
     background: white;
-    position: relative;
+    border:gray;
+    position: absolute;
+    top:60px;
+    right: 50px;
     margin: 1.75rem auto;
     border-radius: 3px;
-    max-width: 500px;
+    max-width: 400px;
     padding: 2rem;
+  
   }
   
-  .modal-header {
+  .modal-header3 {
     display: flex;
   }
   
-  .modal-close-button {
+  .modal-close-button3 {
     font-size: 1.4rem;
     font-weight: 700;
     line-height: 1;

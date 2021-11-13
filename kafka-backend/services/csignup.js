@@ -53,7 +53,7 @@ function register(msg, callback) {
 
 
 function login(message, callback) {
-	console.log("inside handle req", message.email);
+	console.log("inside handle req", message);
 	let emailId = message.email;
 	console.log("EmailId is:", emailId);
 
@@ -484,7 +484,7 @@ function handle_request(msg, callback) {
 	console.log(msg);
 	if (msg.path === "login") {
 	  delete msg.path;
-	  login(msg, callback);
+	 login(msg, callback);
 	} 
 	if (msg.path === "register") {
 		delete msg.path;

@@ -1,5 +1,6 @@
 const initialState = {
     restaurant:{},
+    token: "",
 }
 
 const reducer = (state= initialState, action)=>{
@@ -14,6 +15,10 @@ const reducer = (state= initialState, action)=>{
         case "LOGOUT_RESTAURANT":
             console.log("logout successful")
             return{...state, restaurant:null}
+        case "REMOVE_TOKEN" :
+            return { ...state,token:""};
+        case "ADDING_TOKEN" :
+            return { ...state,token: action.payload};
         default:
             return state;
 

@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const kafka = require("../kafka/client");
 const jwt = require("jsonwebtoken");
-const { auth } = require("../passport");
+//const { auth } = require("../passport");
 const { secret } = require("../passconfig");
-auth();
+const passport = require('passport');
+//auth();
 
 //exports.UserSignUp = (req, res) =>
 router.post("/api/register", (req, res) => {
@@ -17,7 +18,7 @@ router.post("/api/register", (req, res) => {
 			
 			res.status(299).send({message:"Acoount with this email already exists"})
 		} else {
-			const payload = { _id: result.userid };
+			const payload = { email: result.email, role: "resturant" };
 			const token = jwt.sign(payload, secret, {
 				expiresIn: 1008000,
 			});
@@ -31,7 +32,7 @@ router.post("/api/register", (req, res) => {
 });
 //==========================================================
 
-router.post("/api/login", (req, res) => {
+router.post("/api/login",  (req, res) => {
 
 	req.body.path = "login";
 	kafka.make_request("rsignup", req.body, (err, result) => {
@@ -178,7 +179,7 @@ router.post("/api/deletedish/:dishId", (req, res) => {
 });
 //=============================================================
 
-router.post("/api/getd/:dishId/:restaurantId", (req, res) => {
+router.post("/api/getd/:dishId/:restaurantId",  (req, res) => {
 	console.log("in");
 	req.body.path = "getDishDetails";
 	req.body.restaurantId= req.params.restaurantId;
@@ -197,7 +198,7 @@ router.post("/api/getd/:dishId/:restaurantId", (req, res) => {
 });
 //=============================================================
 
-router.post("/api/key/", (req, res) => {
+router.post("/api/key/",  (req, res) => {
 	console.log("in");
 	req.body.path = "restaurantFindKey";
 	kafka.make_request("rsignup", req.body, (err,result) => {

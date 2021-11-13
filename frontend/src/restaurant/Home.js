@@ -169,6 +169,8 @@ const deleteDish =  (id) =>{
         <div className="name" style={{paddingLeft: 0, fontSize:22}}>
            Welcome back {restaurant.rname}
         </div>
+
+        <button onClick={()=>{ console.log("button")}}>button</button>
         <div>
            
            {restaurant.profilepic && <img style={{

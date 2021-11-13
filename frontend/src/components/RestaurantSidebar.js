@@ -93,8 +93,8 @@ export default function PersistentDrawerLeft() {
           
             
           </IconButton>
-          <Link to='/rhome' style={{paddingTop:42,}}>
-          <img
+          <Link to='/rhome' style={{paddingTop:40,maxHeight:80}}>
+          <img 
                 src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg "
                 alt="uber eats"
               />

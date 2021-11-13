@@ -2,7 +2,7 @@ import React, { useEffect , useState} from "react";
 import MaterialTable from "material-table";
 import { forwardRef } from 'react';
 import { Link } from 'react-router-dom'
-
+import Button from '@mui/material/Button'
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -98,6 +98,7 @@ function AllOrders() {
           const tempdatapic = []
           responseData.data.forEach((row)=>{
             if(row.mode=="delivery"){
+              console.log("del",row)
                 if(row.ostatus=="Order received" || row.ostatus=="Preparing" || row.ostatus=="On the way")
                 {
                     tempdatadel.push({...row, status: "New order"})
@@ -105,7 +106,7 @@ function AllOrders() {
                 else if(row.ostatus=="Delivered"){
                     tempdatadel.push({...row, status: "Delivered order"})
                 }
-                else if(row.ostatus=="Cancelled"){
+                else if(row.ostatus=="Cancelled Order"){
                     
                     tempdatadel.push({...row, status: "Cancelled order"})
                 }
@@ -113,6 +114,7 @@ function AllOrders() {
             }
             
             else {
+              console.log("pic",row)
                 if(row.ostatus=="Order received" || row.ostatus=="Preparing" || row.ostatus=="Pickup ready")
                 {
                     
@@ -121,19 +123,19 @@ function AllOrders() {
                 else if(row.ostatus=="Picked up"){
                     tempdatapic.push({...row, status: "Delivered order"})
                 }
-                else if(row.ostatus=="Cancelled"){
+                else if(row.ostatus=="Cancelled  Order"){
                     tempdatapic.push({...row, status: "Cancelled order"})
                 }
                 
             }
-            console.log("here",row)
+           
         })
     
         //setcustomerData(responseData.data)
         setDeliveryData(tempdatadel)
         setPickupData(tempdatapic)
-        setData(tempdatadel);
-        console.log("restaurant", responseData.data);
+        setData(tempdatapic);
+        //console.log("restaurant", responseData.data);
         //console.log("resss ",customerData);
         //localStorage.setItem("restaurant", JSON.stringify(responseData.data));
       }
@@ -175,35 +177,34 @@ function AllOrders() {
            <div className="header__upperheader"  style={{backgroundColor:headbg,boxShadow:shadow}}   >
              <div className="header__upperheaderleft">
              <Menu /><RestaurantSidebar/>
-             {/* <Link to='/rhome'>
-                <img
-                    src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg "
-                     alt="uber eats" /></Link> */}
-            </div>
-            {/* <div className="header__upperheadercenter"   >
-               <LocationOn />
-               <input type="text" placeholder="What are you craving? " />
-            </div> */}
             
+            </div>
+           
+            
+        <button onClick={()=>{ console.log("button")}}>button</button>
             <div className="header__upperheaderright" onClick={signout}>
                  <p> Sign out </p>
             </div>
-            {/* <div className="header__upperheaderright">
-                 <p> Add dishes </p>
-            </div> */}
+          
            </div>
         </div> 
+        
       <div style={{paddingTop:90, paddingLeft:20, paddingRight:20}}>
+        <button onClick={()=>{ console.log("button")}}>button</button>
 
-          <button onClick={() => {
+          <Button variant="outlined" stlye={{cursor:"pointer"}} onClick={() => {
+            console.log("pickup",pickupData)
               setData(pickupData)
              setLookup({ "Order received": 'Order received', "Preparing": 'Preparing', "Pickup ready": "Pickup ready", "Picked up": "Picked up" })}
-          }>Pickup orders</button>
+          }>Pickup orders</Button>
           <button onClick={() => {
+             console.log("pickup",pickupData)
               setData(deliveryData)
             
               setLookup({  "Order received": 'Order received', "Preparing": 'Preparing', "On the way": "On the way", "Delivered":"Delivered"  })}}>
                   Delivery orders</button>
+      
+      
       <MaterialTable
         icons={tableIcons}
         title="Orders"
@@ -247,6 +248,8 @@ function AllOrders() {
           }}
       />
       </div> 
+
+      <button onClick={()=>{ console.log("button")}}>button</button>
       </div>
     )
   }

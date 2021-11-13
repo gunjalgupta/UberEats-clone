@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-//import React, { useState, useEffect, useContext } from 'react'
 import { Link } from "react-router-dom";
 import axios from "axios";
 import M from "materialize-css";
-import Button from "@mui/material/Button";
 import { useHistory } from "react-router-dom";
 import Restaurant from "../components/Restaurants";
-import ReactDOM from "react-dom";
+import Cart from "../components/Cart"
 import {
   
   Menu,
@@ -14,11 +12,8 @@ import {
   Search
 } from "@mui/icons-material";
 import "./Home.css";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import { styled, useTheme } from "@mui/material/styles";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormGroup from "@mui/material/FormGroup";
@@ -27,30 +22,23 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { useDispatch ,useSelector} from "react-redux";
-import { logout } from "../actions/userActions";
+import { logout ,removeToken} from "../actions/userActions";
 import { login } from '../actions/userActions';
+import {orderPlaced} from '../actions/cartActions'
 import CustomerSidebar from "../components/CustomerSidebar"
 import Slider from '@mui/material/Slider';
-import { orderPlaced } from "../actions/cartActions";
-
 
 const Home = () => {
   const history = useHistory();
   const dispatch= useDispatch();
   const [search, setsearch] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
-  const [customerData, setcustomerData]= useState();
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [value, setValue] = useState("");
   const [headbg, setheadbg] = useState("transparent");
   const [shadow, setshadow] = useState("none");
   const user = useSelector((state) => state.user);
-  const cartt = useSelector((state)=>state.cart)
   
-
- 
-  
-
   window.addEventListener("scroll", () => {
     if (window.scrollY >= 50) {
       setheadbg("#FFFFFF");
@@ -65,23 +53,15 @@ const Home = () => {
 
   useEffect(() => setFilteredRestaurants(restaurants), [restaurants])
 
-  // const Item = styled(Paper)(({ theme }) => ({
-  //   ...theme.typography.body2,
-  //   padding: theme.spacing(2),
-  //   textAlign: 'center',
-  //   color: theme.palette.text.secondary,
-  // }));
-
   useEffect(() => {
     const customerId = user.user.customerId;
 
-    axios.get(`/customer/api/profile/${customerId}`, {}).then((response) => {
+    axios.get(`/customer/api/profile/${customerId}`).then((response) => {
       //console.log("res", response);
       if (response.data.error) {
         console.log("res", response);
         M.toast({ html: response.data.error, classes: "#c62828 red darken-3" });
       } else {
-        setcustomerData(response.data);
         console.log(response.data);
         dispatch(login( response.data))
 
@@ -94,120 +74,14 @@ const Home = () => {
 
   function signout(){
     dispatch(logout());
+    dispatch(removeToken());
+    dispatch(orderPlaced());
     history.push("/")
   }
 
-  const useModal = () => {
-    const [isShowing, setIsShowing] = useState(false);
-
-    function toggle() {
-      setIsShowing(!isShowing);
-    }
-
-    return {
-      isShowing,
-      toggle,
-    };
-  };
-
-  const Modal = ({ isShowing, hide }) =>
-    isShowing
-      ? ReactDOM.createPortal(
-          <React.Fragment>
-            <div className="modal-overlay" />
-            <div
-              className="modal-wrapper"
-              aria-modal
-              aria-hidden
-              tabIndex={-1}
-              role="dialog"
-            >
-              <div className="modal">
-              <div style={{ display: "flex", alignItems: "center",fontSize:30}}> {cartt.cart?cartt.cart[0].rname: <p/>}</div>
-               
-                <div className="modal-header" style={{justifyContent: 'flex-end'}}>
-                  <button
-                    type="button"
-                    className="modal-close-button"
-                    data-dismiss="modal"
-                    aria-label="Close"
-                    onClick={hide}
-                  >
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <Typography component="div" variant="h5"></Typography>
-              
-                <Typography
-                  variant="subtitle1"
-                  color="text.secondary"
-                  component="div"
-                  style={{paddingBottom: '25px'}}
-                >
-                  <br />
-                  {cartt.cart? 
-                  <div >Cart Items
-                  <div style={{display :"flex", flexDirection:"row"}}> 
-                  <div>Dish name  </div> <div style={{paddingLeft:"85px"}}>   Quantity </div><div style={{paddingLeft:"110px"}}>  Subtotal</div></div></div>
-                  :<p></p>}
-                
-                </Typography>
-                <Grid container spacing={3}>
-                  
-                  {cartt.cart?cartt.cart&&
-                    cartt.cart.map((dish) => (
-                      <Grid container item>
-                        <Grid container xs={4}>
-                          {dish.dname}
-                        </Grid>
-                        <Grid container xs={4}>
-                          {dish.quantity}
-                        </Grid>
-                        <Grid container xs={4}>
-                          ${dish.subtotal}
-                        </Grid>
-                      </Grid>
-                    )):<Typography
-                    variant="subtitle1"
-                    color="text.secondary"
-                    component="div"
-                    style={{paddingBottom: '25px'}}
-                  > Cart is empty </Typography>}
-                  
-                </Grid>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}
-                >
-                  
-
-                  {cartt.cart? <Link to ='/checkout'style={{paddingTop: '40px'}}>
-                  
-                  <Button
-                    onClick={() => {
-                      toggle();
-                    }}
-                    style={{color:'white', backgroundColor:'black', display:'flex',}}
-                  >
-                    GO TO CHECKOUT . ${localStorage.getItem("order") && JSON.parse(localStorage.getItem("order")).total}
-                  </Button></Link> : <Button disabled
-                    onClick={() => {
-                      toggle();
-                    }}
-                    style={{color:'white', backgroundColor:'black', display:'flex',}}
-                  > ADD ITEMS
-                  </Button>}
-                </Box>
-              </div>
-            </div>
-          </React.Fragment>,
-          document.body
-        )
-      : null;
-  const { isShowing, toggle } = useModal();
 
   useEffect(() => {
     getRestaurants();
-    //dispatch(orderPlaced());
   }, []);
 
   const getRestaurants = async () => {
@@ -216,12 +90,8 @@ const Home = () => {
     await axios
       .post(
         `/customer/api/getRestarants/${customerId}`,
-        {}
+        {headers: { 'Authorization':user.token.token}}
       )
-      //     .then((response) =>
-      //   {
-      //     return JSON.parse(response)
-      //   })
       .then((responseData) => {
         console.log("res", responseData);
         if (responseData.data.error) {
@@ -231,7 +101,6 @@ const Home = () => {
             classes: "#c62828 red darken-3",
           });
         } else {
-          //setcustomerData(responseData.data)
           setRestaurants(responseData.data);
           console.log(responseData.data);
         }
@@ -343,24 +212,8 @@ const Home = () => {
               onChange={handleChange}
               onKeyPress={handleKeypress}
             />
-          </div>
-          <div className="header__upperheaderright" onClick={toggle}>
-            <p>
-              {" "}
-              <ShoppingCartOutlinedIcon style={{ color: "black" }} />
-              <span className="empty-message">
-                {" "}
-                {cartt.cart
-                  ? cartt.cart.length
-                  : "Your cart is empty"}
-              </span>{" "}
-            </p>
-            <Modal
-              isShowing={isShowing}
-              hide={toggle}
-              style={{ position: "absolute", width: "240px", height: "340px" }}
-            />
-          </div>
+          </div>         
+          <Cart/>
           <div className="header__upperheaderright" onClick={signout}>
             <p> Sign out </p>
           </div>

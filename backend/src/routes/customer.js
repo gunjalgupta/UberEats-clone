@@ -2,9 +2,11 @@ const express = require("express");
 const router = express.Router();
 const kafka = require("../kafka/client");
 const jwt = require("jsonwebtoken");
-const { auth } = require("../passport");
+const passport = require('passport');
+//require('../passport')(passport)
+//const { auth } = require("../passport");
 const { secret } = require("../passconfig");
-auth();
+//auth();
 
 //exports.UserSignUp = (req, res) =>
 router.post("/api/register", (req, res) => {
@@ -19,7 +21,7 @@ router.post("/api/register", (req, res) => {
 
 			res.status(299).send({message:"Email already exists"});
 		} else {
-			const payload = { _id: result.userid };
+			const payload = { email: result.email };
 			const token = jwt.sign(payload, secret, {
 				expiresIn: 1008000,
 			});
@@ -51,12 +53,16 @@ router.post("/api/login", (req, res) => {
 				
 				res.status(209).send({message:"Incorrect password"});
 			} else {
-				const payload = { _id: result._id };
-				const token = jwt.sign(payload, secret, {
+				const payload = { email: result.email, role:"customer"  };
+				const token = jwt.sign(payload, "gunjal_secure_string", {
 					expiresIn: 1008000,
 				});
+				jwt.verify(token, "gunjal_secure_string", function(err, data){
+					console.log(err, data);
+			   })
 				//req.session.user = result;
-				result.token = "JWT " + token;
+				console.log("token",token);
+				result.token = "Bearer" + token;
 				// res.cookie("cookie", result.username, {
 				// 	maxAge: 900000,
 				// 	httpOnly: false,
@@ -198,7 +204,7 @@ router.post("/api/deletefav", (req, res) => {
 	});
 });
 //===========================================
-router.post("/api/showfav/:customerId", (req, res) => {
+router.post("/api/showfav/:customerId",  (req, res) => {
 	console.log("in");
 	req.body.path = "showfav";
 	req.body.customerId= req.params.customerId;
@@ -251,7 +257,7 @@ router.post("/api/addaddress/", (req, res) => {
 	});
 });
 //======================================
-router.post("/api/fetchaddress/:customerId", (req, res) => {
+router.post("/api/fetchaddress/:customerId",(req, res) => {
 	console.log("in");
 	req.body.path = "fetchaddress";
 	req.body.customerId= req.params.customerId;

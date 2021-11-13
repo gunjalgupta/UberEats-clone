@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const kafka = require("../kafka/client");
-
+const passport = require('passport');
 
 //exports.UserSignUp = (req, res) =>
-router.post("/api/getcusorder", (req, res) => {
+router.post("/api/getcusorder",(req, res) => {
 	console.log("in");
 	req.body.path = "getcusorder";
 	kafka.make_request("order", req.body, (err, result) => {
@@ -22,7 +22,7 @@ router.post("/api/getcusorder", (req, res) => {
 	});
 });
 //========================================================
-router.post("/api/getcusdetail", (req, res) => {
+router.post("/api/getcusdetail",  (req, res) => {
 	console.log("in");
 	req.body.path = "getcusorderdetail";
 	kafka.make_request("order", req.body, (err, result) => {
@@ -77,7 +77,7 @@ router.post("/api/addorder/", (req, res) => {
 	});
 });
 //========================================================
-router.post("/api/adddetails", (req, res) => {
+router.post("/api/adddetails",(req, res) => {
 	console.log("in");
 	values=req.body
 	req.body.path = "addorderdetails";
@@ -96,7 +96,7 @@ router.post("/api/adddetails", (req, res) => {
 	});
 });
 //========================================================
-router.post("/api/status", (req, res) => {
+router.post("/api/status",(req, res) => {
 	console.log("in");
 	req.body.path = "status";
 	kafka.make_request("order", req.body, (err, result) => {

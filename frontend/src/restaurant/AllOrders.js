@@ -166,22 +166,18 @@ useEffect(()=>{
       <div className="header__upper">
          <div className="header__upperheader"  style={{backgroundColor:headbg,boxShadow:shadow}}   >
            <div className="header__upperheaderleft">
+           <Menu/>
            <Link to='/rhome'>
               <img
                   src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg "
                    alt="uber eats" /></Link>
           </div>
-          {/* <div className="header__upperheadercenter"   >
-             <LocationOn />
-             <input type="text" placeholder="What are you craving? " />
-          </div> */}
+         
           
           <div className="header__upperheaderright" onClick={signout}>
                <p> Sign out </p>
           </div>
-          {/* <div className="header__upperheaderright">
-               <p> Add dishes </p>
-          </div> */}
+          
          </div>
       </div> 
     <div style={{paddingTop:90, paddingLeft:20, paddingRight:20}}>

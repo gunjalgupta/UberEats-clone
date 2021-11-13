@@ -11,7 +11,7 @@ const Showprofile = () => {
         const getkey = async () => {
             try{
                 const cusId = {
-                    customerId : JSON.parse(localStorage.getItem("customer")).customerId
+                    customerId : user.user.customerId
                 }
                 const res = await axios.post("/customer/api/key", cusId)
                 console.log("------",res)

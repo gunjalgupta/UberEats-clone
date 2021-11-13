@@ -9,10 +9,11 @@ import Showprofile from "./Showprofile";
 import Profilepic from "./Profilepic";
 import Center from "../Center";
 import RestaurantSidebar from '../components/RestaurantSidebar';
-//import './Adddish.css'
+import {useSelector } from "react-redux";
 
 const Editdish = () => {
   const history = useHistory();
+  const restaurant= useSelector((state)=>state.restaurant)
   const [dishData, setdishData] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
   const [image, setImage] = useState([]);
@@ -34,9 +35,7 @@ const Editdish = () => {
   });
 
   useEffect(() => {
-    var restaurantId = JSON.parse(
-      localStorage.getItem("restaurant")
-    ).restaurantId;
+    var restaurantId = restaurant.restaurant.restaurantId;
     axios
       .post(`/restaurant/api/getd/${dishId}/${restaurantId}`, {})
       .then((response) => {
@@ -50,8 +49,6 @@ const Editdish = () => {
         } else {
           setdishData(response.data);
           console.log(response.data);
-          //console.log("resss ",customerData);
-          //localStorage.setItem('dish', JSON.stringify(response.data));
         }
       });
   }, []);
@@ -101,8 +98,7 @@ const Editdish = () => {
               vegan: dishData.vegan,
               categoryId: dishData.categoryId,
               Price: dishData.Price,
-              restaurantId: JSON.parse(localStorage.getItem("restaurant"))
-                .restaurantId,
+              restaurantId: restaurant.restaurant.restaurantId,
             }}
             onSubmit={(values, { setSubmitting, resetForm }) => {
               console.log(values);
@@ -127,9 +123,7 @@ const Editdish = () => {
               // const dishId = 1
               const value = { values: values };
               console.log("price", value);
-              var restaurantId = JSON.parse(
-                localStorage.getItem("restaurant")
-              ).restaurantId;
+              var restaurantId = restaurant.restaurant.restaurantId;
               axios
                 .post(`/restaurant/api/editdish/${dishId}`, value)
                 .then((response) => {

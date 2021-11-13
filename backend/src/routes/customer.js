@@ -96,9 +96,10 @@ router.post("/api/getRestarants/:customerId", (req, res) => {
 });
 //==========================================================
 
-router.post("/api/searchRestaurant/", (req, res) => {
+router.post("/api/searchRestaurant/:customerId", (req, res) => {
 	console.log("in");
 	req.body.path = "searchRestaurant";
+	req.body.customerId= req.params.customerId;
 	kafka.make_request("csignup", req.body, (err,result) => {
 		if (result === 500) {
 			

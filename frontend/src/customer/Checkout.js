@@ -132,10 +132,10 @@ const Checkout = () => {
           draggable: true,
           progress: undefined,
           });
-        localStorage.removeItem("cart",null);
+        //localStorage.removeItem("cart",null);
         dispatch(orderPlaced());
-        localStorage.removeItem("rescartid",null);
-        localStorage.removeItem("order",null);
+        //localStorage.removeItem("rescartid",null);
+        //localStorage.removeItem("order",null);
        
         const timeout = setTimeout(() => {
           history.push("/chome");
@@ -188,7 +188,7 @@ const Checkout = () => {
 
   function signout(){
     dispatch(logout());
-    localStorage.setItem("customer",null);
+    //localStorage.setItem("customer",null);
     history.push("/")
   }
 

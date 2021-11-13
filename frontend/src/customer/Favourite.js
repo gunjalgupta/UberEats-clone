@@ -2,7 +2,7 @@ import React, { useEffect , useState} from "react";
 import { Menu, LocationOn } from "@mui/icons-material";
 import axios from 'axios';
 import Restaurant from '../components/Restaurants'
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../actions/userActions";
 import { useHistory } from "react-router-dom";
 import Box from '@mui/material/Box';
@@ -14,6 +14,7 @@ import CustomerSidebar from "../components/CustomerSidebar"
 const Favourite= function (){
 
     const dispatch= useDispatch();
+    const user= useSelector((state) => state.user);
     const history= useHistory();
     const [headbg,setheadbg]=useState('transparent');
     const [shadow,setshadow]=useState('none');
@@ -35,12 +36,11 @@ const Favourite= function (){
 
   function signout(){
     dispatch(logout());
-    localStorage.setItem("customer",null);
     history.push("/")
   }
 
     useEffect(()=>{
-        const customerId =  JSON.parse(localStorage.getItem("customer")).customerId;
+        const customerId =  user.user.customerId
 
         axios.post(`/customer/api/showfav/${customerId}`,{})
         .then(response => {

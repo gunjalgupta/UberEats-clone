@@ -1,21 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import { useDispatch,useSelector } from 'react-redux';
+import {useSelector } from 'react-redux';
 import axios from 'axios';
 import './Showprofile.css'
-
 const Showprofile = () => {
-    const user = useSelector((state) => state.user);
+    const restaurant = useSelector((state) => state.restaurant);
     const [key, setKey] = useState();
     const [images, setImages] = useState();
     useEffect(() => {
         const getkey = async () => {
             try{
                 const resId = {
-                    restaurantId : JSON.parse(localStorage.getItem("restaurant")).restaurantId
+                    restaurantId : restaurant.restaurant.restaurantId
                 }
                 console.log(resId);
                 const res = await axios.post("/restaurant/api/key", {
-                    restaurantId : JSON.parse(localStorage.getItem("restaurant")).restaurantId
+                    restaurantId : restaurant.restaurant.restaurantId
                 })
                 console.log("------",res)
                 setKey(res.data)

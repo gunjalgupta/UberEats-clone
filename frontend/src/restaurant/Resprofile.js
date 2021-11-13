@@ -75,7 +75,6 @@ function Resprofile() {
 
   function signout() {
     dispatch(logout());
-    localStorage.setItem("customer", null);
     history.push("/");
   }
 

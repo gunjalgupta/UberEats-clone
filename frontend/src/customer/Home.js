@@ -108,11 +108,13 @@ const Home = () => {
   };
 
   function searchRestaurant(name) {
+
+    const customerId= user.user.customerId;
     setsearch(true);
     const Name = { name: name };
     console.log(Name);
     axios
-      .post("/customer/api/searchRestaurant", Name)
+      .post(`/customer/api/searchRestaurant/${customerId}`, Name)
 
       .then((responseData) => {
         console.log("res", responseData);
@@ -175,9 +177,6 @@ const Home = () => {
       .filter((restaurent) => (( filters.veg && restaurent.veg === "Yes" ) || ( filters.nonVeg && restaurent.nonVeg === "Yes" ) || ( filters.vegan && restaurent.vegan === "Yes" )))
     )
   }, [filters])
-
-  console.log("filtered", filteredRestaurants)
-  console.log("all", restaurants)
 
 
   return (

@@ -11,8 +11,8 @@ import { CountryDropdown, RegionDropdown } from "react-country-region-selector-m
 import './UpdateProfile.css'
 import Showprofile from './Showprofile';
 import Profilepic from './Profilepic';
-import { logoutRestaurant } from "../actions/resActions";
-import { useDispatch } from "react-redux";
+import { logoutRestaurant, loginRestaurant } from "../actions/resActions";
+import { useDispatch,useSelector } from "react-redux";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import RestaurantSidebar from '../components/RestaurantSidebar';
@@ -21,6 +21,7 @@ import { Menu, LocationOn} from "@mui/icons-material";
 const UpdateProfile = () => {
     const history = useHistory()
     const dispatch = useDispatch()
+    const restaurant = useSelector((state) => state.restaurant);
     const [restaurantData, setRestaurantData] = useState([])
     const [image, setImage] = useState([])
     const [url, setUrl] = useState([])
@@ -47,15 +48,13 @@ const UpdateProfile = () => {
 
   function signout(){
     dispatch(logoutRestaurant());
-    localStorage.setItem("restaurant",null);
     history.push("/")
   }
 
     //const { state, dispatch } = useContext(UserContext)
     useEffect(() => {
-        const restaurantId =JSON.parse(localStorage.getItem("restaurant")).restaurantId;
+        const restaurantId =restaurant.restaurant.restaurantId;
         console.log(restaurantId);
-        console.log(JSON.parse(localStorage.getItem("restaurant")).restaurantId)
 
         axios.get(`/restaurant/api/profile/${restaurantId}`, {
         }).then(response => {
@@ -70,6 +69,7 @@ const UpdateProfile = () => {
                     console.log(response.data)
                     console.log("resss ",restaurantData);
                     localStorage.setItem('restaurant', JSON.stringify(response.data));
+                    dispatch(loginRestaurant(response.data))
                 
             }
         })
@@ -87,17 +87,9 @@ const UpdateProfile = () => {
                 <div className="header__upperheader"  style={{backgroundColor:headbg,boxShadow:shadow}}   >
                   <div className="header__upperheaderleft">
                     <Menu/><RestaurantSidebar/>
-                  {/* <Link to="/rhome">
-                 <img
-                    src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg "
-                     alt="uber eats"
-                   />{" "}
-                 </Link> */}
+                
                  </div>
-                 {/* <div className="header__upperheadercenter"   >
-                 
-                    <input type="text" placeholder="What are you craving? " />
-                 </div> */}
+                
 
                  <div className="header__upperheaderright" onClick={signout}>
                       <p> Sign out </p>
@@ -138,7 +130,7 @@ const UpdateProfile = () => {
                             onSubmit={(values, { setSubmitting, resetForm }) => {
                                 console.log(values)
                                 
-                                const restaurantId = JSON.parse(localStorage.getItem("restaurant")).restaurantId
+                                const restaurantId = restaurant.restaurant.restaurantId
                                 console.log(restaurantId)
                                 axios.post(`restaurant/api/profile/updatedetails/`, { restaurantId ,values: values})
                                     .then(response => {
@@ -157,6 +149,10 @@ const UpdateProfile = () => {
                                                 draggable: true,
                                                 progress: undefined,
                                                 });
+                                                dispatch(loginRestaurant(response.data))
+                                                const timeout = setTimeout(() => {
+                                                    history.push("/chome");
+                                                  }, 3000);
                                         }
                                     }).catch(err => {
                                         console.log(err)

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import './Login.css';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { loginRestaurant } from '../actions/resActions';
+import { loginRestaurant,addingToken } from '../actions/resActions';
 import { useHistory, Link } from 'react-router-dom';
 
 function Login() {
@@ -21,14 +21,15 @@ function Login() {
                 pwd,
             };
             console.log("------",loginAdmin)
-            console.log("local", localStorage.getItem('token'))
             const res = await axios.post("/restaurant/api/login",loginAdmin);
-                localStorage.setItem('restaurant', JSON.stringify(res.data));
                 console.log("response",res);
                 console.log("data",res.data);
         
-                localStorage.setItem('token', res.data.token);
+                
             if(res.status == 200) {
+                dispatch(addingToken({
+                    token:res.data.token,
+                }))
                 dispatch(loginRestaurant({
                     email: res.data.email,
                     restaurantId: res.data.restaurantId,

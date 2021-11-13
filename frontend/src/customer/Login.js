@@ -22,11 +22,8 @@ function Login() {
                 pwd,
             };
             console.log("------",loginAdmin)
-            //console.log("local", localStorage.getItem('token'))
             const res = await axios.post("/customer/api/login",loginAdmin)
             console.log("------",res)
-        localStorage.setItem('customer', JSON.stringify(res.data));
-        localStorage.setItem('token', res.data.token);
         if(res.status == 200) {
             dispatch(addingToken({
                 token:res.data.token,

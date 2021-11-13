@@ -139,29 +139,27 @@ function searchRestaurant(message, callback) {
 	console.log("inside handle req", message);
 	let name = message.name;
     let finaldata=[];
-	
 
-Dish
-.find( {$or: [ {dname: name} , {cuisine: name}]},{restaurantId:1}, async (err, ids) => {
-	//console.log("ids",ids);
-	if (err) {
-		callback(null, 500);
-	}
-	else {
-		console.log("ids",ids)
-		await Promise.all(ids.map((id)=>{
-			Restaurants.find({restaurantId:id.restaurantId},async (err,rest)=>{
-				if (err){
-					console.log(err);
-					callback(null, 500);
-				}
-				else{
-					console.log("dish",rest)
-					finaldata.push(rest[0])
-					//callback(null,finaldata)
-				}
-			})
-		}),
+	Restaurants.aggregate([
+		{$lookup:{
+			from: "dishes",
+			localField:"restaurantId",
+			foreignField : "restaurantId",
+			as:"table2" 
+		}},
+		{$unwind:"$table2"},
+		
+		{$match:  {$or: [ {"table2.dname": name} , {"table2.cuisine": name}]}},
+		//{$match: {$expr :{ $eq: [ "$table2.dname", name] }}},
+		{$project: {table2:0}}
+
+	],(err,res)=>{
+		console.log("res1",res)
+		res.map((res1)=>{
+			finaldata.push(res1)
+		})
+		console.log("----",finaldata);
+	}).then((result)=>{
 		Restaurants.find( {$or: [ {rname: name} , {city: name}, {stateId : name },{countryId  : name}]},  (err, res) => {
 					if(err){
 						console.log(err);
@@ -170,62 +168,14 @@ Dish
 					else{
 						console.log("rest",res)
 						res.map((res1)=>{
-							finaldata.push(res)
+							finaldata.push(res1)
 						})
-						//finaldata.push(res)
+						console.log("here")
 						callback(null,finaldata)
 					}
-				}))
-	}
-
-})
-// .then((res)=>{
-// 	Restaurants.find( {$or: [ {rname: name} , {city: name}, {stateId : name },{countryId  : name}]},  (err, ids) => {
-// 		if(err){
-// 			console.log(err);
-// 			callback(null,500);
-// 		}
-// 		else{
-// 			console.log("rest",ids)
-// 			finaldata.push(ids)
-// 		}
-// 	})
-// }).then((response)=>{
-
-// 	callback(null, finaldata);
-// }
-// ).catch((err)=>{console.log(err)})
-
-
-//await console.log("data1",finaldata)
-//await 
-// .aggregate([
-
-//     { $match: {$or: [ {dname: name} , {cuisine: name}]} },
-// 	{
-// 		$lookup:
-// 		  {
-// 			from: "restaurants",
-// 			localField: "restaurantId",
-// 			foreignField: "restaurantId",
-// 			as: "fromItems"
-// 		  }
-// 	 },{
-// 		$replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$fromItems", 0 ] }, "$$ROOT" ] } }
-// 	 },
-// 	 { $project: { fromItems: 0 } }
-	
-// 	])
-// Restaurants.find( { $or: [ { city: name }, {stateId : name },{countryId  : name},{rname  : name},{dname:name},{cuisine:name}   ] } ,(err, data) => {
-// 		if (err) {
-// 			callback(null, 500);
-// 		}
-// 		  else {
-// 			finaldata.push(data)
-// 			console.log("all",finaldata);
-// 			callback(null, data);
-// 		  }
-// 	})
+				})
+		
+		  })
 	
 }
 //======================================================================
@@ -496,7 +446,15 @@ function handle_request(msg, callback) {
 	  } 
 	if (msg.path === "searchRestaurant") {
 		delete msg.path;
-		searchRestaurant(msg, callback);
+		if(msg.name===''){
+			console.log("get")
+			getRestaurants(msg, callback);	
+		}
+		else{
+			console.log("search")
+			searchRestaurant(msg, callback);
+		}
+		
 	  } 
 	if (msg.path === "customerProfile") {
 		delete msg.path;

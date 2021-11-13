@@ -21,7 +21,7 @@ import Select from "@mui/material/Select";
 import './Pastorders.css'
 import { Typography } from "@material-ui/core";
 import ReactDOM from "react-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../actions/userActions";
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
@@ -74,6 +74,7 @@ const Pastorders = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const history= useHistory();
   const dispatch= useDispatch();
+  const user= useSelector((state)=>state.user)
   const [headbg, setheadbg] = useState("transparent");
   const [shadow, setshadow] = useState("none");
   const [mode, setMode] = useState("pickup")
@@ -99,7 +100,7 @@ const Pastorders = () => {
   useEffect(() => {
     axios
       .post("/orders/api/getcusorder", {
-        customerId: JSON.parse(localStorage.getItem("customer")).customerId,
+        customerId: user.user.customerId,
       })
       .then((res) => {
         console.log("api",res);
@@ -112,7 +113,7 @@ const Pastorders = () => {
   const getdetails= (invoiceId)=>{
     axios
     .post("/orders/api/getcusdetail", {
-      customerId: JSON.parse(localStorage.getItem("customer")).customerId,
+      customerId: user.user.customerId,
       invoiceId : invoiceId,
     })
     .then((res) => {
@@ -258,7 +259,6 @@ const Pastorders = () => {
   
   function signout(){
     dispatch(logout());
-    localStorage.setItem("customer",null);
     history.push("/")
   }
   const saveStatus = async (ostatus,orderId) =>{
@@ -273,11 +273,7 @@ const Pastorders = () => {
         }
         else {
           //console.log(" dishes",responseData.data)
-                //setcustomerData(responseData.data)
-                //setDishes(responseData.data)
                 
-                //console.log("resss ",customerData);
-                //localStorage.setItem('dish', JSON.stringify(responseData.data));
             
         }
     })

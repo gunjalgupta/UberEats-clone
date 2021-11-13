@@ -1,6 +1,7 @@
 import React, {useState}from 'react';
 import axios from 'axios';
 import './Profilepic.css';
+import { useDispatch, useSelector } from "react-redux";
 
 async function postImages({image,customerId}){
     const formData = new FormData();
@@ -24,9 +25,10 @@ const Profilepic = () => {
     
   const [file, setFile] = useState();
  const [images, setImages] = useState([])
+ const user= useSelector((state)=>state.user)
   const submit = async (event) => {
       event.preventDefault()
-      const result = postImages({image:file, customerId: JSON.parse(localStorage.getItem("customer")).customerId})
+      const result = postImages({image:file, customerId: user.user.customerId})
       //console.log("res",result)
       setImages([result.image, ...images])
   }

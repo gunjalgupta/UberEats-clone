@@ -48,7 +48,6 @@ const UpdateProfile = () => {
 
   function signout() {
     dispatch(logout());
-    localStorage.setItem("customer", null);
     history.push("/");
   }
 
@@ -64,9 +63,8 @@ const UpdateProfile = () => {
         setcustomerData(response.data);
         console.log(response.data);
         //console.log("resss ",customerData);
-        //localStorage.setItem("customer", JSON.stringify(response.data));
         dispatch(login( response.data))
-       
+        
       }
     });
 
@@ -175,6 +173,9 @@ const UpdateProfile = () => {
                         progress: undefined,
                       });
                       dispatch(login(response.data))
+                      const timeout = setTimeout(() => {
+                        history.push("/chome");
+                      }, 3000);
                     }
                   })
                   .catch((err) => {

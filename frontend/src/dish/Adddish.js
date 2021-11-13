@@ -10,16 +10,13 @@ import {
 import Center from "../Center";
 import axios from 'axios';
 import RestaurantSidebar from '../components/RestaurantSidebar';
-//import './Adddish.css'
+import {useSelector } from "react-redux";
 
 const Adddish = () => {
   const history = useHistory();
-  //const [dishData, setdishData] = useState([])
-  //const [restaurants, setRestaurants] = useState([])
-  //const [image, setImage] = useState([])
+  const restaurant= useSelector((state)=>state.restaurant)
   const [headbg, setheadbg] = useState("transparent");
   const [shadow, setshadow] = useState("none");
-  const [inputdisplay, setinputdisplay] = useState(0);
   const [dname, setdname] = useState();
   const [ingredients, setingredients] = useState();
   const [ddesc, setddesc] = useState();
@@ -36,15 +33,15 @@ const Adddish = () => {
     if (window.scrollY >= 50) {
       setheadbg("#FFFFFF");
       setshadow("rgb(226 226 226) 0px -2px 0px inset");
-      setinputdisplay(1);
+ 
     } else {
       setheadbg("transparent");
       setshadow("none");
-      setinputdisplay(0);
+    
     }
   });
  useEffect(()=>{
-   setrestaurantId(JSON.parse(localStorage.getItem("restaurant")).restaurantId)
+   setrestaurantId(restaurant.restaurant.restaurantId)
  },[]);
 
 
@@ -87,22 +84,6 @@ const Adddish = () => {
     history.push("/rhome");
 }
 
-  useEffect(() => {
-    // axios.post(`http://localhost:8081/restaurant/getd/${dishId}`,{})
-    // .then(response => {
-    //     console.log("res",response);
-    //     if (response.data.error) {
-    //         console.log("res",response);
-    //         M.toast({ html: response.data.error, classes: "#c62828 red darken-3" })
-    //     }
-    //     else {
-    //             setdishData(response.data[0])
-    //             console.log(response.data[0])
-    //             //console.log("resss ",customerData);
-    //             localStorage.setItem('dish', JSON.stringify(response.data));
-    //     }
-    // })
-  }, []);
 
   return (
     <div className="reshome">
@@ -113,17 +94,9 @@ const Adddish = () => {
         >
           <div className="header__upperheaderleft">
             <Menu /><RestaurantSidebar/>
-            {/* <a href="/rhome">
-              <img
-                src="https://d3i4yxtzktqr9n.cloudfront.net/web-eats-v2/ee037401cb5d31b23cf780808ee4ec1f.svg "
-                alt="uber eats"
-              />
-            </a> */}
+            
           </div>
-          {/* <div className="header__upperheadercenter"   >
-           <LocationOn />
-           <input type="text" placeholder="What are you craving? " />
-        </div> */}
+         
 
           <div className="header__upperheaderright">
             <p> Sign out </p>

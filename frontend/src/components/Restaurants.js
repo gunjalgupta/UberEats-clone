@@ -11,16 +11,20 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useHistory } from "react-router-dom";
 import "../customer/Restaurant.css";
 import axios from "axios";
+import { useDispatch ,useSelector} from "react-redux";
+import { logout ,removeToken} from "../actions/userActions";
+import { login } from '../actions/userActions';
 
 const Restaurants = ({ Name, Opens_at, imageKey, id ,desc}) => {
   const history = useHistory();
   const [icon, seticon] = useState([false]);
+  const user = useSelector((state) => state.user);
   const [favrestaurants, setRestaurants] = useState([]);
 
   function addfav() {
     seticon(true);
     const Req = {
-      customerId: JSON.parse(localStorage.getItem("customer")).customerId,
+      customerId: user.user.customerId,
       restaurantId: id,
     };
     console.log(Req);
@@ -39,7 +43,7 @@ const Restaurants = ({ Name, Opens_at, imageKey, id ,desc}) => {
   function deletefav() {
     seticon(false);
     const Req = {
-      customerId: JSON.parse(localStorage.getItem("customer")).customerId,
+      customerId: user.user.customerId,
       restaurantId: id,
     };
     console.log(Req);
@@ -57,7 +61,7 @@ const Restaurants = ({ Name, Opens_at, imageKey, id ,desc}) => {
 
   useEffect(() => {
     const req = {
-      customerId: JSON.parse(localStorage.getItem("customer")).customerId,
+      customerId: user.user.customerId,
       restaurantId: id,
     };
     console.log(id);
@@ -74,7 +78,6 @@ const Restaurants = ({ Name, Opens_at, imageKey, id ,desc}) => {
           console.log(response.data);
           //setRestaurants(response.data)
           //console.log("resss ",customerData);
-          //localStorage.setItem('customer', JSON.stringify(response.data[0]));
           //M.toast({ html: response.data.error, classes: "#c62828 red darken-3" })
           seticon(false);
         }

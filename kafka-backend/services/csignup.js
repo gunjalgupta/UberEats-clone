@@ -1,5 +1,5 @@
 "use strict";
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const Customers = require("../models/customer");
 const Restaurants = require("../models/restaurant");
 const Favourites = require("../models/favourite");

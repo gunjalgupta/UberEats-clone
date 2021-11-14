@@ -58,7 +58,7 @@ function AllOrders() {
   const [shadow,setshadow]=useState('none');
   const [deliveryData, setDeliveryData] = useState([]);
   const [pickupData, setPickupData] = useState([]);
-  const [lookup, setLookup] = useState({  "placed": 'Placed', "Preparing": 'Preparing', "On the way": "On the way", "Delivered":"Delivered"  });
+  const [lookup, setLookup] = useState({  "placed": 'Placed', "Preparing": 'Preparing', "On the way": "On the way", "Delivered":"Delivered" ,"Cancelled Order":"Cancelled Order" });
 
 
 
@@ -185,13 +185,13 @@ useEffect(()=>{
         <button onClick={() => {
           console.log("pickup",pickupData)
             setData(pickupData)
-           setLookup({ "Order received": 'Order received', "Preparing": 'Preparing', "Pickup ready": "Pickup ready", "Picked up": "Picked up" })}
+           setLookup({ "Order received": 'Order received', "Preparing": 'Preparing', "Pickup ready": "Pickup ready", "Picked up": "Picked up" ,"Cancelled Order":"Cancelled Order" })}
         }>Pickup orders</button>
         <button onClick={() => {
           console.log("deliveryData",deliveryData);
             setData(deliveryData)
           
-            setLookup({  "Order received": 'Order received', "Preparing": 'Preparing', "On the way": "On the way", "Delivered":"Delivered"  })}}>
+            setLookup({  "Order received": 'Order received', "Preparing": 'Preparing', "On the way": "On the way", "Delivered":"Delivered" ,"Cancelled Order":"Cancelled Order"  })}}>
                 Delivery orders</button>
     <MaterialTable
       icons={tableIcons}

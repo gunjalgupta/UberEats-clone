@@ -30,17 +30,19 @@ const Profilepic = () => {
     const fil = event.target.files[0]
     setFile(fil)
   }
-    return (
-        <div style={{
-            display: "flex",
-            justifyContent: "center",
-        }}>
-            <form onSubmit={submit} className="profile_chose">
-                <input onChange={fileSelected} type="file" accept="image/*" className="profile_browse"></input>
-                <button type="submit" className="profile_button">Submit</button>
-            </form>
-        </div>
-    )
+
+  return (
+    <div style={{
+        display: "flex",
+        justifyContent: "center",
+    }}>
+        <form onSubmit={submit} className="profile_chose">
+            <input onChange={fileSelected} type="file" accept="image/*" className="profile_browse"></input>
+            <button type="submit" className="profile_button">Submit</button>
+        </form>
+    </div>
+)
+  
 }
 
 

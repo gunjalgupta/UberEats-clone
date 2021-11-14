@@ -151,7 +151,7 @@ const UpdateProfile = () => {
                                                 });
                                                 dispatch(loginRestaurant(response.data))
                                                 const timeout = setTimeout(() => {
-                                                    history.push("/chome");
+                                                    history.push("/rhome");
                                                   }, 3000);
                                         }
                                     }).catch(err => {

@@ -59,28 +59,7 @@ function handleTopicRequest(topic_name, fname) {
   });
 }
 
-function response(data, res, producer) {
-	console.log("after handle", res);
-	var payloads = [
-		{
-			topic: data.replyTo,
-			messages: JSON.stringify({
-				correlationId: data.correlationId,
-				data: res,
-			}),
-			partition: 0,
-		},
-	];
-	producer.send(payloads, function (err, data) {
-		//console.log('producer send', data);
-		if (err) {
-			console.log("Error when producer sending data", err);
-		} else {
-			console.log(data);
-		}
-	});
-	return;
-}
+
 
 
 //handleTopicRequest("getTopic", authService);

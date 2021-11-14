@@ -1,7 +1,7 @@
 import React, {useState}from 'react';
 import axios from 'axios';
 import './Profilepic.css';
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 async function postImages({image,customerId}){
     const formData = new FormData();

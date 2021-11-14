@@ -1,6 +1,4 @@
 import React, { useState, useEffect} from "react";
-
-import { Link } from "react-router-dom";
 import {
   
   Menu,
@@ -77,7 +75,6 @@ const Pastorders = () => {
   const user= useSelector((state)=>state.user)
   const [headbg, setheadbg] = useState("transparent");
   const [shadow, setshadow] = useState("none");
-  const [mode, setMode] = useState("pickup")
   // const [pickup, setPickup] = useState()
   // const [delivery, setDelivery] = useState()
   const [orders, setOrders] = useState([
@@ -90,12 +87,10 @@ const Pastorders = () => {
   const [orderdetails, setOrderdetails] = useState([])
   const [filteredOrders, setFilteredOrders] = useState(orders);
   const [filters, setFilters] = useState([]);
-  const [data, setData] = useState([])
   const [pd, updatePD] = useState({
     delivery: true,
     pickup: true,
   })
-  const lookup={  "Order received": 'Order received', "Cancel order":"Cancelled order" }
 
   useEffect(() => {
     axios
@@ -105,7 +100,6 @@ const Pastorders = () => {
       .then((res) => {
         console.log("api",res);
         setOrders(res.data)
-        setData(res.data)
       })
 
   }, []);
@@ -141,16 +135,16 @@ const Pastorders = () => {
   useEffect(() => {
     if(pd.pickup===true && pd.delivery===false){
       console.log("pi")
-      setFilters(["Order received", "Preparing", " Pickup Ready", "Picked up"])
+      setFilters(["Order received", "Preparing", " Pickup Ready", "Picked up", "Cancelled Order"])
       console.log(filters)
     }
     else if(pd.delivery===true && pd.pickup===false){
       console.log("de")
-      setFilters(["Order received", "Preparing", "On the way", "Delivered"])
+      setFilters(["Order received", "Preparing", "On the way", "Delivered", 'Cancelled Order'])
     }
     else{
       
-      setFilters(["All orders","Order received", "Preparing", "On the way", "Delivered", " Pickup Ready", "Picked up"])
+      setFilters(["All orders","Order received", "Preparing", "On the way", "Delivered", " Pickup Ready", "Picked up", 'Cancelled Order'])
     }
     console.log(pd)
   }, [pd])
@@ -236,12 +230,7 @@ const Pastorders = () => {
                     ))}
                   <Grid container item>
                     <Grid container xs={4}></Grid>
-                    {/* <Grid container xs={4}>
-                      Total Price :
-                    </Grid>
-                    <Grid container xs={4}>
-                    {total}
-                    </Grid> */}
+                    
                   </Grid>
                 </Grid>
                 <Box
@@ -268,20 +257,15 @@ const Pastorders = () => {
     await axios.post("/orders/api/status",req)
     .then(responseData => {
         if (responseData.data.error) {
-            //console.log("res",responseData);
+            console.log("res",responseData);
            // M.toast({ html: responseData.data.error, classes: "#c62828 red darken-3" })
         }
         else {
-          //console.log(" dishes",responseData.data)
-                
-            
+          console.log(" dishes",responseData.data)
         }
     })
 
 }
-
-const emptyRows =
-page > 0 ? Math.max(0, (1 + page) * rowsPerPage - orders.length) : 0;
 
 const handleChangePage = (event, newPage) => {
 setPage(newPage);
@@ -291,12 +275,6 @@ const handleChangeRowsPerPage = (event) => {
 setRowsPerPage(parseInt(event.target.value, 10));
 setPage(0);
 };
-// TablePaginationActions.propTypes = {
-//   count: PropTypes.number.isRequired,
-//   onPageChange: PropTypes.func.isRequired,
-//   page: PropTypes.number.isRequired,
-//   rowsPerPage: PropTypes.number.isRequired,
-// };
 
 
   return (
@@ -373,6 +351,7 @@ setPage(0);
                   color: "black",
                 }} />} label="Delivery" />
            </FormGroup>
+           <br/>
           <FormControl fullWidth style ={{
                   color: "black",
                 }}>
@@ -395,36 +374,7 @@ setPage(0);
             </Select>
           </FormControl>
         </Box>
-        {/* <table
-          style={{
-            width: "100%",
-            paddingTop:'30px'
-          }}
-        >
-          <tr>
-            <th>Restaurant Name</th>
-            <th>Order Date</th>
-            <th>Amount</th>
-            <th>Mode of delivery</th>
-          </tr> 
-
-          {/* Use filterredOrders for this 
-          {filteredOrders.map((order) => (
-            <tr onClick={()=>{toggle()
-            getdetails(order.invoiceId)}}>
-              <td>{order.rname}</td>
-              <td>{order.updatedAt? (order.updatedAt).substring(0,10): order.updatedAt}</td>
-              <td>{order.total}</td>
-              <td>{order.mode}</td>
-              <Modal
-              isShowing={isShowing}
-              hide={toggle}
-              total= {order.total}
-              style={{ position: "absolute", width: "240px", height: "340px" }}
-            />
-            </tr>
-          ))}
-        </table> */}
+        
 <Modal
               isShowing={isShowing}
               hide={toggle}
@@ -450,7 +400,6 @@ setPage(0);
             }}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-            //ActionsComponent={TablePaginationActions}
           />
               ),
                     }}
@@ -465,7 +414,8 @@ setPage(0);
            
             
           ]}
-        data={data}
+        data={filteredOrders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)}
+
         actions={[
           {
             icon: () => <LaunchIcon />,
@@ -473,7 +423,6 @@ setPage(0);
             onClick: (event, rowData) => 
             {toggle();
             getdetails(rowData.invoiceId);
-            //history.push(`/cusprofile/${rowData.customerId}`)
           }
           },
           rowData => ({
@@ -496,10 +445,9 @@ setPage(0);
           }
         }}
         options={{
-            grouping: true
-          }}
-        
-        
+            grouping: true,
+            pageSize: rowsPerPage 
+          }} 
       />
       </div>
     </div>

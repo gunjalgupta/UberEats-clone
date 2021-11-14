@@ -21,7 +21,7 @@ const secretAccessKey = "VWTXiznwUFjlmZHrkxC6egDBo+P7a3mMfYBwtFdD"
 
 // uploads a file to s3
 function uploadFile(file) {
-  console.log("HELLO");
+  console.log("HELLO",file);
   const fileStream = fs.createReadStream(file.path)
   console.log("HELLO2");
   const uploadParams = {

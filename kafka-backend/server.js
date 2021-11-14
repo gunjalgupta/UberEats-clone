@@ -1,12 +1,12 @@
 var connection = new require("./kafka/Connection");
-const envv= require('dotenv').config({ path: '/Users/gunjalgupta/Desktop/UberEats-clone/backend/src/.env' })
+const envv= require('dotenv').config({ path: 'UberEats-clone/backend/src/.env' })
 
 
 const mongoose = require("mongoose");
 //const keys = require("./config/keys");
 //const { MONGOURI } = require("./config/keys");
 
-mongoose.connect(process.env.DATABASE_URL, {
+mongoose.connect("mongodb+srv://cluster0_Gunjal:databse@cluster0.1n5rc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", {
   useNewUrlParser: true,
 
   

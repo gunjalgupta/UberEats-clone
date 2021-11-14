@@ -1,4 +1,4 @@
-const envv= require('dotenv').config({ path: '/Users/gunjalgupta/Desktop/UberEats-clone/backend/src/.env' })
+const envv= require('dotenv').config({ path: '/UberEats-clone/backend/src/.env' })
 
 
 const express = require('express')
@@ -15,7 +15,7 @@ const bcrypt = require("bcryptjs");
 
 const passport= require("passport")
 
-mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
+mongoose.connect("mongodb+srv://cluster0_Gunjal:databse@cluster0.1n5rc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", { useNewUrlParser: true })
 const db = mongoose.connection
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('Connected to Database'))
@@ -95,7 +95,7 @@ app.use('/uploadroutes', customerImage)
 const orderRouter = require('./routes/orders')
 app.use('/orders', orderRouter)
 
-var server= app.listen(PORT, () => console.log(`Listening on port ${process.env.PORT}.`));
+var server= app.listen(PORT, () => console.log(`Listening on port 5000.`));
 
 
 module.exports = app;

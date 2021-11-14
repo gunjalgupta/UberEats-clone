@@ -1,4 +1,4 @@
-const envv= require('dotenv').config({ path: '/UberEats-clone/backend/src/.env' })
+const envv= require('dotenv').config()
 
 
 const express = require('express')

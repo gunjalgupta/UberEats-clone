@@ -75,6 +75,7 @@ const Pastorders = () => {
   const user= useSelector((state)=>state.user)
   const [headbg, setheadbg] = useState("transparent");
   const [shadow, setshadow] = useState("none");
+  const [special, setSpecial] = useState("")
   // const [pickup, setPickup] = useState()
   // const [delivery, setDelivery] = useState()
   const [orders, setOrders] = useState([
@@ -104,7 +105,8 @@ const Pastorders = () => {
 
   }, []);
 
-  const getdetails= (invoiceId)=>{
+  const getdetails= (invoiceId, message)=>{
+    setSpecial(message)
     axios
     .post("/orders/api/getcusdetail", {
       customerId: user.user.customerId,
@@ -212,7 +214,15 @@ const Pastorders = () => {
                   component="div"
                 >
                   <br />
-                  Order details
+                  Receipt
+                </Typography>
+                <Typography
+                  variant="subtitle1"
+                  color="text.secondary"
+                  component="div"
+                >
+                  <br />
+                  Special instructions: {special}
                 </Typography>
                 <Grid container spacing={3}>
                   {orderdetails.map((dish) => (
@@ -422,7 +432,7 @@ setPage(0);
             tooltip: 'See order details',
             onClick: (event, rowData) => 
             {toggle();
-            getdetails(rowData.invoiceId);
+            getdetails(rowData.invoiceId, rowData.message);
           }
           },
           rowData => ({

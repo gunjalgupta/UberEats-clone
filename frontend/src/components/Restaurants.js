@@ -11,9 +11,8 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useHistory } from "react-router-dom";
 import "../customer/Restaurant.css";
 import axios from "axios";
-import { useDispatch ,useSelector} from "react-redux";
-import { logout ,removeToken} from "../actions/userActions";
-import { login } from '../actions/userActions';
+import { useSelector} from "react-redux";
+
 
 const Restaurants = ({ Name, Opens_at, imageKey, id ,desc}) => {
   const history = useHistory();

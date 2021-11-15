@@ -238,7 +238,7 @@ const Checkout = () => {
         >
           <Grid container xs={12} style={{display:'flex', justifyContent:'center',  paddingTop: "0px",fontSize:32}}>
           {
-          cartt.cart[0]?cartt.cart[0].rname:"rname"
+          cartt.cart[0]?cartt.cart[0].rname:"Panda Express"
           }
                 </Grid>
           <table

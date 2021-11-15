@@ -13,7 +13,7 @@ const Showprofile = () => {
                 const cusId = {
                     customerId : user.user.customerId
                 }
-                const res = await axios.post("/customer/api/key", cusId)
+                const res = await axios.post("/customer/api/key", cusId, {headers: { 'Authorization':user.token.token}})
                 console.log("------",res)
                 setKey(res.data)
                 }catch(err){

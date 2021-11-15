@@ -23,12 +23,15 @@ import { logoutRestaurant } from "../actions/resActions";
 import {  useHistory } from 'react-router-dom'
 import axios from "axios";
 import LaunchIcon from '@mui/icons-material/Launch';
+import {useSelector } from "react-redux";
 
-import RestaurantSidebar from '../components/RestaurantSidebar';
-import { Menu, LocationOn} from "@mui/icons-material";
+import { Menu} from "@mui/icons-material";
 
 
 function AllOrders() {
+
+  const restaurant= useSelector((state)=>state.restaurant)
+  
   const tableIcons = {
       Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
       Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -86,7 +89,7 @@ function signout(){
 useEffect(()=>{
   const restaurantId =  JSON.parse(localStorage.getItem("restaurant")).restaurantId;
   axios
-  .post(`/orders/api/getresorders/${restaurantId}`, {})
+  .post(`/orders/api/getresorders/${restaurantId}`, {headers: { 'Authorization':restaurant.token.token}})
   .then((responseData) => {
     console.log("res", responseData);
     if (responseData.data.error) {

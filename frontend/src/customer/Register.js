@@ -23,7 +23,7 @@ function Register(){
                 pwd,
             };
             console.log("------",regAdmin)
-            const res = await axios.post("/customer/api/register/",regAdmin);
+            const res = await axios.post("/customer/api/register/",regAdmin,);
             console.log("response", res);
             if(res.status == 200) {
                 dispatch(register({

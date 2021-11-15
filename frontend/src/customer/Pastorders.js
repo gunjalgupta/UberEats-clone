@@ -264,7 +264,7 @@ const Pastorders = () => {
     const req = { ostatus: ostatus,
     orderId: orderId}
     //const restaurantId =1
-    await axios.post("/orders/api/status",req)
+    await axios.post("/orders/api/status",req, {headers: { 'Authorization':user.token.token}})
     .then(responseData => {
         if (responseData.data.error) {
             console.log("res",responseData);

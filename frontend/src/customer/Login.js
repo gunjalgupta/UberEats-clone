@@ -22,7 +22,7 @@ function Login() {
                 pwd,
             };
             console.log("------",loginAdmin)
-            const res = await axios.post("/customer/api/login",loginAdmin)
+            const res = await axios.post("/customer/api/login",loginAdmin,)
             console.log("------",res)
         if(res.status == 200) {
             dispatch(addingToken({

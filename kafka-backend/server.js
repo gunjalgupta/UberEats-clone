@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 
 mongoose.connect("mongodb+srv://cluster0_Gunjal:databse@cluster0.1n5rc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", {
   useNewUrlParser: true,
-
+  maxPoolSize:13
   
 });
 mongoose.connection.on("connected", () => {

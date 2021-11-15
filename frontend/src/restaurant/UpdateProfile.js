@@ -57,7 +57,7 @@ const UpdateProfile = () => {
         console.log(restaurantId);
 
         axios.get(`/restaurant/api/profile/${restaurantId}`, {
-        }).then(response => {
+        },{headers: { 'Authorization':restaurant.token.token}}).then(response => {
             console.log("res",response);
             if (response.data.error) {
                 console.log("res",response);
@@ -132,7 +132,7 @@ const UpdateProfile = () => {
                                 
                                 const restaurantId = restaurant.restaurant.restaurantId
                                 console.log(restaurantId)
-                                axios.post(`restaurant/api/profile/updatedetails/`, { restaurantId ,values: values})
+                                axios.post(`restaurant/api/profile/updatedetails/`, { restaurantId ,values: values},{headers: { 'Authorization':restaurant.token.token}})
                                     .then(response => {
                                         console.log("update",response)
                                         if (response.data.error) {

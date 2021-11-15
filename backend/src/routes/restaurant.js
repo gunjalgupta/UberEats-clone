@@ -8,7 +8,7 @@ const passport = require('passport');
 //auth();
 
 //exports.UserSignUp = (req, res) =>
-router.post("/api/register", (req, res) => {
+router.post("/api/register",passport.authenticate('jwt', {session: false}), (req, res) => {
 	console.log("in");
 	req.body.path = "register";
 	kafka.make_request("rsignup", req.body, (err, result) => {
@@ -32,7 +32,7 @@ router.post("/api/register", (req, res) => {
 });
 //==========================================================
 
-router.post("/api/login",  (req, res) => {
+router.post("/api/login", passport.authenticate('jwt', {session: false}), (req, res) => {
 
 	req.body.path = "login";
 	kafka.make_request("rsignup", req.body, (err, result) => {
@@ -69,7 +69,7 @@ router.post("/api/login",  (req, res) => {
 	});
 });
 //===========================
-router.get("/api/profile/:restaurantId", (req, res) => {
+router.get("/api/profile/:restaurantId",passport.authenticate('jwt', {session: false}), (req, res) => {
 	console.log("in");
 	req.body.path = "restaurantProfile";
 	req.body.restaurantId= req.params.restaurantId;
@@ -87,7 +87,7 @@ router.get("/api/profile/:restaurantId", (req, res) => {
 });
 //=============================================================
 
-router.post("/api/profile/updatedetails/", (req, res) => {
+router.post("/api/profile/updatedetails/", passport.authenticate('jwt', {session: false}),(req, res) => {
 	console.log("in");
 	req.body.path = "restaurantDetails";
 
@@ -105,7 +105,7 @@ router.post("/api/profile/updatedetails/", (req, res) => {
 
 //===================================================
 
-router.post("/api/getdish/:restaurantId", (req, res) => {
+router.post("/api/getdish/:restaurantId", passport.authenticate('jwt', {session: false}),(req, res) => {
 	console.log("in");
 	req.body.path = "getDish";
 	req.body.restaurantId= req.params.restaurantId;
@@ -124,7 +124,7 @@ router.post("/api/getdish/:restaurantId", (req, res) => {
 //=============================================================
 
 
-router.post("/api/adddish/", (req, res) => {
+router.post("/api/adddish/",passport.authenticate('jwt', {session: false}), (req, res) => {
 	console.log("in");
 	req.body.path = "addDish";
 	//req.body.restaurantId= req.params.restaurantId;
@@ -142,7 +142,7 @@ router.post("/api/adddish/", (req, res) => {
 });
 //=============================================================
 
-router.post("/api/editdish/:dishId", (req, res) => {
+router.post("/api/editdish/:dishId", passport.authenticate('jwt', {session: false}),(req, res) => {
 	console.log("in");
 	req.body.path = "editDish";
 	req.body.dishId= req.params.dishId;
@@ -161,7 +161,7 @@ router.post("/api/editdish/:dishId", (req, res) => {
 });
 //=============================================================
 
-router.post("/api/deletedish/:dishId", (req, res) => {
+router.post("/api/deletedish/:dishId", passport.authenticate('jwt', {session: false}),(req, res) => {
 	console.log("in");
 	req.body.path = "deleteDish";
 	req.body.dishId= req.params.dishId;
@@ -179,7 +179,7 @@ router.post("/api/deletedish/:dishId", (req, res) => {
 });
 //=============================================================
 
-router.post("/api/getd/:dishId/:restaurantId",  (req, res) => {
+router.post("/api/getd/:dishId/:restaurantId", passport.authenticate('jwt', {session: false}), (req, res) => {
 	console.log("in");
 	req.body.path = "getDishDetails";
 	req.body.restaurantId= req.params.restaurantId;
@@ -198,7 +198,7 @@ router.post("/api/getd/:dishId/:restaurantId",  (req, res) => {
 });
 //=============================================================
 
-router.post("/api/key/",  (req, res) => {
+router.post("/api/key/", passport.authenticate('jwt', {session: false}), (req, res) => {
 	console.log("in");
 	req.body.path = "restaurantFindKey";
 	kafka.make_request("rsignup", req.body, (err,result) => {

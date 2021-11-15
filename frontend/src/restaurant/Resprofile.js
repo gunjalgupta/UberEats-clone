@@ -13,10 +13,13 @@ import { logout } from "../actions/userActions";
 import CustomerSidebar from "../components/CustomerSidebar";
 import { Menu } from "@mui/icons-material";
 import Cart from "../components/Cart"
+import {useSelector } from "react-redux";
 
 var _ = require("lodash");
 
 function Resprofile() {
+
+  const user= useSelector((state)=>state.user)
   const history = useHistory();
   const dispatch = useDispatch();
   const [restaurant, setRestaurant] = useState([]);
@@ -43,7 +46,7 @@ function Resprofile() {
 
   const getRestaurant = async () => {
     await axios
-      .get(`/restaurant/api/profile/${restaurantId}`, {})
+      .get(`/restaurant/api/profile/${restaurantId}`, {headers: { 'Authorization':user.token.token}})
       .then((responseData) => {
         console.log("res", responseData);
         if (responseData.data.error) {
@@ -59,7 +62,7 @@ function Resprofile() {
 
   const getDishes = async () => {
     await axios
-      .post(`/restaurant/api/getdish/${restaurantId}`, {})
+      .post(`/restaurant/api/getdish/${restaurantId}`, {headers: { 'Authorization':user.token.token}})
       .then((responseData) => {
         console.log("res", responseData);
         if (responseData.data.error) {

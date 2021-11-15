@@ -37,7 +37,7 @@ const Editdish = () => {
   useEffect(() => {
     var restaurantId = restaurant.restaurant.restaurantId;
     axios
-      .post(`/restaurant/api/getd/${dishId}/${restaurantId}`, {})
+      .post(`/restaurant/api/getd/${dishId}/${restaurantId}`,  {headers: { 'Authorization':restaurant.token.token}})
       .then((response) => {
         console.log("res", response);
         if (response.data.error) {
@@ -125,7 +125,7 @@ const Editdish = () => {
               console.log("price", value);
               var restaurantId = restaurant.restaurant.restaurantId;
               axios
-                .post(`/restaurant/api/editdish/${dishId}`, value)
+                .post(`/restaurant/api/editdish/${dishId}`, value,{headers: { 'Authorization':restaurant.token.token}})
                 .then((response) => {
                   console.log("update", value);
                   if (response.data.error) {

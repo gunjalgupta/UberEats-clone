@@ -42,7 +42,7 @@ const Favourite= function (){
     useEffect(()=>{
         const customerId =  user.user.customerId
 
-        axios.post(`/customer/api/showfav/${customerId}`,{})
+        axios.post(`/customer/api/showfav/${customerId}`, {headers: { 'Authorization':user.token.token}})
         .then(response => {
             console.log("res",response);
             if (response.data.error) {

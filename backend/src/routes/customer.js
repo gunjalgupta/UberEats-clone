@@ -9,7 +9,7 @@ const { secret } = require("../passconfig");
 //auth();
 
 //exports.UserSignUp = (req, res) =>
-router.post("/api/register",passport.authenticate('jwt', {session: false}), (req, res) => {
+router.post("/api/register", (req, res) => {
 	console.log("in");
 	req.body.path = "register";
 	kafka.make_request("csignup", req.body, (err, result) => {
@@ -38,7 +38,7 @@ router.post("/api/register",passport.authenticate('jwt', {session: false}), (req
 router.post("/api/login", (req, res) => {
 
 	req.body.path = "login";
-	kafka.make_request("csignup",passport.authenticate('jwt', {session: false}), req.body, (err, result) => {
+	kafka.make_request("csignup",req.body, (err, result) => {
 		console.log("result is:", result);
 		if (err) {
 			console.log(err);

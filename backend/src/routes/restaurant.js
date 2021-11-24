@@ -8,7 +8,7 @@ const passport = require('passport');
 //auth();
 
 //exports.UserSignUp = (req, res) =>
-router.post("/api/register",passport.authenticate('jwt', {session: false}), (req, res) => {
+router.post("/api/register", (req, res) => {
 	console.log("in");
 	req.body.path = "register";
 	kafka.make_request("rsignup", req.body, (err, result) => {
@@ -32,7 +32,7 @@ router.post("/api/register",passport.authenticate('jwt', {session: false}), (req
 });
 //==========================================================
 
-router.post("/api/login", passport.authenticate('jwt', {session: false}), (req, res) => {
+router.post("/api/login",  (req, res) => {
 
 	req.body.path = "login";
 	kafka.make_request("rsignup", req.body, (err, result) => {

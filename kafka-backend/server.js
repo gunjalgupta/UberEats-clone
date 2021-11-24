@@ -22,12 +22,10 @@ require("./models/subscriber");
 require("./models/customer");
 console.log(envv);
 
-//var authService = require("./services/authService.js");
 var csignup = require("./services/csignup.js");
 var rsignup = require("./services/rsignup.js");
 var dish = require("./services/dish.js");
 var order = require("./services/order.js");
-//var postService = require("./services/Post/postService");
 
 function handleTopicRequest(topic_name, fname) {
   //var topic_name = 'root_topic';
@@ -60,11 +58,7 @@ function handleTopicRequest(topic_name, fname) {
 }
 
 
-
-
-//handleTopicRequest("getTopic", authService);
 handleTopicRequest("csignup", csignup );
 handleTopicRequest("rsignup", rsignup );
 handleTopicRequest("dish", dish );
 handleTopicRequest("order", order );
-//handleTopicRequest("postTopic", postService);

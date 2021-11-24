@@ -1,23 +1,16 @@
-//require('dotenv').config()
+require('dotenv').config()
 const fs = require('fs')
 var AWS = require('aws-sdk');
 const s3 = new AWS.S3({
-  region: "us-east-1",
-  accessKeyId : "AKIAYJE6TRDKZWQTAMH2",
-  secretAccessKey :"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"})
+  region: process.env.region,
+  accessKeyId : process.env.accessKeyId,
+  secretAccessKey :process.env.secretAccessKey})
 //const S3 = require('aws-sdk/clients/s3')
 const { ADDRGETNETWORKPARAMS } = require('dns')
 
-const bucketName = "imagesmenu"
-const region = "us-east-1"
-const accessKeyId = "AKIAYJE6TRDKZWQTAMH2"
-const secretAccessKey = "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"
+const bucketName = process.env.bucketName
 
-// const S3 = new s3({
-//   region,
-//   accessKeyId,
-//   secretAccessKey
-// })
+
 
 // uploads a file to s3
 function uploadFile(file) {

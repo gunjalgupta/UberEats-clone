@@ -4,9 +4,7 @@ var bcrypt = require('bcrypt-nodejs');
 const Customers = require('../models/customer')
 const Restaurants = require("../models/restaurant");
 const Orders = require("../models/order");
-const Favourites = require("../models/favourite");
 const Dishes = require("../models/dish");
-const saltRounds = 10;
 
 const {
     GraphQLObjectType,
@@ -15,7 +13,6 @@ const {
     GraphQLID,
     GraphQLInt,
     GraphQLList,
-    GraphQLNonNull,
     GraphQLBoolean,
 } = graphql;
 

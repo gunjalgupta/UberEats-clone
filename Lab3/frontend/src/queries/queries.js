@@ -1,28 +1,106 @@
 import {gql} from 'apollo-boost';
-import { useQuery } from "@apollo/react-hooks"
 
-const loginn = gql`
+const Cusloginn = gql`
 query Cuslogin($email: String, $pwd: String){
-        login(email: $email, email: $email){
+        Cuslogin(email: $email, email: $email){
             result
             userData{
-                Username
-                Email
-                FirstName
-                LastName
-                Aboutme
-              Country
-              City
-              Gender
-              Hometown
-              School
-              Company
-              Language
-              PhoneNumber
-              Accounttype
+                cname
+                email
               }
         }
     }`
 
+const Resloginn = gql`
+query Reslogin($email: String, $pwd: String){
+        Reslogin(email: $email, email: $email){
+            result
+            userData{
+                cname
+                email
+              }
+        }
+    }`
 
-    export {loginn, };
+    const CustomerDetails = gql`
+    query CustomerDetails($email: String){
+        CustomerDetails(email: $email){
+            cname
+            email
+            about
+            country
+            city
+            state
+            mobileNo
+            profilepic
+            DOB
+            nickname
+        }
+    }
+`
+const RestaurantDetails = gql`
+query RestaurantDetails($email: String){
+    RestaurantDetails(email: $email){
+        rname
+        email
+        rdesc
+        country
+        city
+        state
+        mobileNo
+        profilepic
+        fromTime
+        toTime
+        delivery
+        pickup
+        veg
+        nonVeg
+        vegan
+    }
+}
+`
+const getDish = gql`
+query getDish($email: String){
+    getDish(dishId : $dishId){
+        dname
+        ddesc
+        profilepic
+        veg
+        nonVeg
+        vegan
+        cuisine 
+        category
+        restaurantId
+        price
+        ingredients
+    }
+}
+`
+const getOrder = gql`
+query getOrder($customerId: int){
+    getOrder(customerId : $customerId){
+        customerId
+        restaurantId
+        invoiceId
+        total
+        ostatus
+        mode
+        rname
+        address
+    }
+}
+`
+const getOrderdetails = gql`
+query getOrderdetails($customerId: int){
+    getOrderdetails(customerId : $customerId){
+        price
+        invoiceId
+        quantity
+        dishId
+        dname
+        subtotal
+    }
+}
+`
+
+    export {Cusloginn,Resloginn,RestaurantDetails, CustomerDetails ,getDish ,getOrder ,getOrderdetails};

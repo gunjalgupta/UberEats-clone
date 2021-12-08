@@ -56,7 +56,7 @@ const Home = () => {
   useEffect(() => {
     const customerId = user.user.customerId;
 
-    axios.get(`/customer/api/profile/${customerId}`, {headers: { 'Authorization':user.token.token}}).then((response) => {
+    axios.get(`/customer/api/profile/${customerId}`).then((response) => {
       //console.log("res", response);
       if (response.data.error) {
         console.log("res", response);
@@ -90,7 +90,7 @@ const Home = () => {
     await axios
       .post(
         `/customer/api/getRestarants/${customerId}`,
-        {headers: { 'Authorization':user.token.token}}
+        
       )
       .then((responseData) => {
         console.log("res", responseData);
@@ -114,7 +114,7 @@ const Home = () => {
     const Name = { name: name };
     console.log(Name);
     axios
-      .post(`/customer/api/searchRestaurant/${customerId}`, Name, {headers: { 'Authorization':user.token.token}})
+      .post(`/customer/api/searchRestaurant/${customerId}`, Name,)
 
       .then((responseData) => {
         console.log("res", responseData);

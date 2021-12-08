@@ -89,7 +89,7 @@ function signout(){
 useEffect(()=>{
   const restaurantId =  JSON.parse(localStorage.getItem("restaurant")).restaurantId;
   axios
-  .post(`/orders/api/getresorders/${restaurantId}`, {headers: { 'Authorization':restaurant.token.token}})
+  .post(`/orders/api/getresorders/${restaurantId}`,)
   .then((responseData) => {
     console.log("res", responseData);
     if (responseData.data.error) {
@@ -158,7 +158,7 @@ useEffect(()=>{
           }
           else {
             
-              
+            console.log("Status save response",responseData); 
           }
       })
 

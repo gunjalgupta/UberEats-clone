@@ -78,7 +78,7 @@ router.post("/api/login", (req, res) => {
 });
 //=============================================================
 
-router.post("/api/getRestarants/:customerId",passport.authenticate('jwt', {session: false}), (req, res) => {
+router.post("/api/getRestarants/:customerId", (req, res) => {
 	console.log("in");
 	req.body.path = "getRestaurants";
 	req.body.customerId= req.params.customerId;
@@ -96,7 +96,7 @@ router.post("/api/getRestarants/:customerId",passport.authenticate('jwt', {sessi
 });
 //==========================================================
 
-router.post("/api/searchRestaurant/:customerId", passport.authenticate('jwt', {session: false}),(req, res) => {
+router.post("/api/searchRestaurant/:customerId",(req, res) => {
 	console.log("in");
 	req.body.path = "searchRestaurant";
 	req.body.customerId= req.params.customerId;
@@ -113,7 +113,7 @@ router.post("/api/searchRestaurant/:customerId", passport.authenticate('jwt', {s
 	});
 });
 //===========================
-router.get("/api/profile/:customerId", passport.authenticate('jwt', {session: false}),(req, res) => {
+router.get("/api/profile/:customerId", (req, res) => {
 	console.log("in");
 	req.body.path = "customerProfile";
 	req.body.customerId= req.params.customerId;
@@ -131,7 +131,7 @@ router.get("/api/profile/:customerId", passport.authenticate('jwt', {session: fa
 	});
 });
 //===========================================
-router.post("/api/profile/updatedetails/",passport.authenticate('jwt', {session: false}), (req, res) => {
+router.post("/api/profile/updatedetails/", (req, res) => {
 	console.log("in");
 	req.body.path = "customerDetails";
 
@@ -149,7 +149,7 @@ router.post("/api/profile/updatedetails/",passport.authenticate('jwt', {session:
 });
 //===========================================
 
-router.post("/api/checkfav", passport.authenticate('jwt', {session: false}),(req, res) => {
+router.post("/api/checkfav", (req, res) => {
 	console.log("in",req.body);
 	req.body.path = "checkfav";
 
@@ -168,7 +168,7 @@ router.post("/api/checkfav", passport.authenticate('jwt', {session: false}),(req
 	});
 });
 //===========================================
-router.post("/api/addfav", passport.authenticate('jwt', {session: false}),(req, res) => {
+router.post("/api/addfav",(req, res) => {
 	console.log("in");
 	req.body.path = "addfav";
 
@@ -187,7 +187,7 @@ router.post("/api/addfav", passport.authenticate('jwt', {session: false}),(req, 
 });
 //===========================================
 
-router.post("/api/deletefav", passport.authenticate('jwt', {session: false}),(req, res) => {
+router.post("/api/deletefav",(req, res) => {
 	console.log("in");
 	req.body.path = "deletefav";
 
@@ -205,7 +205,7 @@ router.post("/api/deletefav", passport.authenticate('jwt', {session: false}),(re
 	});
 });
 //===========================================
-router.post("/api/showfav/:customerId", passport.authenticate('jwt', {session: false}), (req, res) => {
+router.post("/api/showfav/:customerId", (req, res) => {
 	console.log("in");
 	req.body.path = "showfav";
 	req.body.customerId= req.params.customerId;
@@ -225,7 +225,7 @@ router.post("/api/showfav/:customerId", passport.authenticate('jwt', {session: f
 });
 //===========================================
 
-router.post("/api/key/", passport.authenticate('jwt', {session: false}),(req, res) => {
+router.post("/api/key/",(req, res) => {
 	console.log("in");
 	req.body.path = "customerFindKey";
 	kafka.make_request("csignup", req.body, (err,result) => {
@@ -242,7 +242,7 @@ router.post("/api/key/", passport.authenticate('jwt', {session: false}),(req, re
 });
 
 //=================================================
-router.post("/api/addaddress/", passport.authenticate('jwt', {session: false}),(req, res) => {
+router.post("/api/addaddress/",(req, res) => {
 	console.log("in");
 	req.body.path = "addaddress";
 	kafka.make_request("csignup", req.body, (err,result) => {
@@ -258,7 +258,7 @@ router.post("/api/addaddress/", passport.authenticate('jwt', {session: false}),(
 	});
 });
 //======================================
-router.post("/api/fetchaddress/:customerId",passport.authenticate('jwt', {session: false}),(req, res) => {
+router.post("/api/fetchaddress/:customerId",(req, res) => {
 	console.log("in");
 	req.body.path = "fetchaddress";
 	req.body.customerId= req.params.customerId;

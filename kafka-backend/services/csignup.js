@@ -324,16 +324,8 @@ function showfav(message, callback) {
 			as:"table2" 
 		}},
 		{$unwind:"$table2"},
-		// { "$redact": { 
-		// 	"$cond": [
-		// 		{ "$eq": [ "$table2.customerId", customerId ] }, 
-		// 		"$$KEEP", 
-		// 		"$$PRUNE"
-		// 	]
-		// }},
-		//{$match: {"table2.customerId" : customerId}},
+		
 		{$match: {$expr :{ $eq: [ "$table2.customerId", customerId] }}},
-		//{$project: {table2:0}}
 
 	]).then((result)=>{
 		console.log("--------------------------",result);
@@ -381,20 +373,8 @@ function customerKey(message, callback) {
 function addaddress(message, callback) {
 	console.log("inside handle req", message);
 	let customerId = message.customerId;
-	//let values = message.values;
 	console.log("Id is:", customerId);
 
-	// const cus = Customers.findOne({ customerId: customerId});
-	// console.log(cus);
-	// cus.save({address:message }, function (err, user) {
-	// 	console.log("user from DB reacibed", user);
-
-	// 	if (err) {
-	// 		callback(null, 500);
-	// 	} else {
-	// 		callback(null,user)
-	// 	}
-	// });
 	Customers.updateOne({customerId:customerId}, {
 		$addToSet:{
 			address: message
@@ -414,7 +394,6 @@ function addaddress(message, callback) {
 function fetchaddress(message, callback) {
 	console.log("inside handle req", message);
 	let customerId = message.customerId;
-	//let values = message.values;
 	console.log("Id is:", customerId);
 
 	Customers.findOne({ customerId: customerId},{address:1,_id:0}, function (err, user) {

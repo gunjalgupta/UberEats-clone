@@ -88,7 +88,7 @@ const Checkout = () => {
         rname:cart[0].rname,
         message:message,
         address:currentAddress
-      },  {headers: { 'Authorization':user.token.token}})
+      })
       .then((response) => {
         console.log("res", response);
         if (response.data.error) {
@@ -115,7 +115,7 @@ const Checkout = () => {
           });
         });
         console.log("-----------",dishesToPass);
-        axios.post("/orders/api/adddetails", dishesToPass, {headers: { 'Authorization':user.token.token}}).then((res)=>{
+        axios.post("/orders/api/adddetails", dishesToPass).then((res)=>{
           console.log("orderdetail",res)
         }).catch((err)=>{
           console.log(err);
@@ -146,7 +146,7 @@ const Checkout = () => {
   const addAddress = () => {
     console.log(address);
 
-    axios.post("/customer/api/addaddress/",address, {headers: { 'Authorization':user.token.token}})
+    axios.post("/customer/api/addaddress/",address)
     .then(response => {
         
         if (response.data.error) {
@@ -171,7 +171,7 @@ const Checkout = () => {
 
   useEffect(() => {
     const customerId =  user.user.customerId;
-    axios.post(`/customer/api/fetchaddress/${customerId}`, {headers: { 'Authorization':user.token.token}})
+    axios.post(`/customer/api/fetchaddress/${customerId}`)
     .then(response => {
         
         if (response.data.error) {

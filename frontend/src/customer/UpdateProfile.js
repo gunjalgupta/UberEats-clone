@@ -54,7 +54,7 @@ const UpdateProfile = () => {
   useEffect(() => {
     const customerId = user.user.customerId;
 
-    axios.get(`/customer/api/profile/${customerId}`,  {headers: { 'Authorization':user.token.token}}).then((response) => {
+    axios.get(`/customer/api/profile/${customerId}`, ).then((response) => {
       console.log("res", response);
       if (response.data.error) {
         console.log("res", response);
@@ -154,7 +154,7 @@ const UpdateProfile = () => {
                   .post(`/customer/api/profile/updatedetails/`, {
                     customerId,
                     values: values,
-                  }, {headers: { 'Authorization':user.token.token}})
+                  })
                   .then((response) => {
                     console.log("update", response);
                     if (response.data.error) {

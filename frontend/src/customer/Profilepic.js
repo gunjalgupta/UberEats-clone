@@ -13,9 +13,7 @@ async function postImages({image,customerId}){
     
     console.log(formData);
     const result = await axios.post('/uploadroutes/api/images', formData, 
-    { 
-        headers: {'Content-Type': 'multipart/form-data'}
-    })
+    )
     console.log("result", result)
     localStorage.setItem('cuspkey', result.data.key);
     return result.data;

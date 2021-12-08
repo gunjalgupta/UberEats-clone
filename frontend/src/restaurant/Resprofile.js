@@ -46,7 +46,7 @@ function Resprofile() {
 
   const getRestaurant = async () => {
     await axios
-      .get(`/restaurant/api/profile/${restaurantId}`, {headers: { 'Authorization':user.token.token}})
+      .get(`/restaurant/api/profile/${restaurantId}`)
       .then((responseData) => {
         console.log("res", responseData);
         if (responseData.data.error) {
@@ -62,7 +62,7 @@ function Resprofile() {
 
   const getDishes = async () => {
     await axios
-      .post(`/restaurant/api/getdish/${restaurantId}`, {headers: { 'Authorization':user.token.token}})
+      .post(`/restaurant/api/getdish/${restaurantId}`,)
       .then((responseData) => {
         console.log("res", responseData);
         if (responseData.data.error) {

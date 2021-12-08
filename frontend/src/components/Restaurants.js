@@ -28,7 +28,7 @@ const Restaurants = ({ Name, Opens_at, imageKey, id ,desc}) => {
     };
     console.log(Req);
     axios
-      .post("/customer/api/addfav", Req,  {headers: { 'Authorization':user.token.token}})
+      .post("/customer/api/addfav", Req, )
 
       .then((responseData) => {
         console.log("add", responseData);
@@ -47,7 +47,7 @@ const Restaurants = ({ Name, Opens_at, imageKey, id ,desc}) => {
     };
     console.log(Req);
     axios
-      .post("/customer/api/deletefav", Req,  {headers: { 'Authorization':user.token.token}})
+      .post("/customer/api/deletefav", Req, )
 
       .then((responseData) => {
         console.log("del", responseData);
@@ -66,7 +66,7 @@ const Restaurants = ({ Name, Opens_at, imageKey, id ,desc}) => {
     console.log(id);
     console.log(req);
     axios
-      .post("/customer/api/checkfav", req, {headers: { 'Authorization':user.token.token}})
+      .post("/customer/api/checkfav", req,)
       .then((response) => {
         console.log("res", response);
         if (response.data === "success") {

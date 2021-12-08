@@ -4,7 +4,7 @@ const kafka = require("../kafka/client");
 const passport = require('passport');
 
 //exports.UserSignUp = (req, res) =>
-router.post("/api/getcusorder",passport.authenticate('jwt', {session: false}),(req, res) => {
+router.post("/api/getcusorder",(req, res) => {
 	console.log("in");
 	req.body.path = "getcusorder";
 	kafka.make_request("order", req.body, (err, result) => {
@@ -22,7 +22,7 @@ router.post("/api/getcusorder",passport.authenticate('jwt', {session: false}),(r
 	});
 });
 //========================================================
-router.post("/api/getcusdetail", passport.authenticate('jwt', {session: false}), (req, res) => {
+router.post("/api/getcusdetail", (req, res) => {
 	console.log("in");
 	req.body.path = "getcusorderdetail";
 	kafka.make_request("order", req.body, (err, result) => {
@@ -40,7 +40,7 @@ router.post("/api/getcusdetail", passport.authenticate('jwt', {session: false}),
 	});
 });
 //========================================================
-router.post("/api/getresorders/:restaurantId", passport.authenticate('jwt', {session: false}),(req, res) => {
+router.post("/api/getresorders/:restaurantId",(req, res) => {
 	console.log("in");
 	req.body.path = "getresorder";
 	req.body.restaurantId= req.params.restaurantId;
@@ -59,7 +59,7 @@ router.post("/api/getresorders/:restaurantId", passport.authenticate('jwt', {ses
 	});
 });
 //========================================================
-router.post("/api/addorder/", passport.authenticate('jwt', {session: false}),(req, res) => {
+router.post("/api/addorder/",(req, res) => {
 	console.log("in");
 	req.body.path = "addorder";
 	kafka.make_request("order", req.body, (err, result) => {
@@ -77,7 +77,7 @@ router.post("/api/addorder/", passport.authenticate('jwt', {session: false}),(re
 	});
 });
 //========================================================
-router.post("/api/adddetails",passport.authenticate('jwt', {session: false}),(req, res) => {
+router.post("/api/adddetails",(req, res) => {
 	console.log("in");
 	values=req.body
 	req.body.path = "addorderdetails";
@@ -96,7 +96,7 @@ router.post("/api/adddetails",passport.authenticate('jwt', {session: false}),(re
 	});
 });
 //========================================================
-router.post("/api/status",passport.authenticate('jwt', {session: false}),(req, res) => {
+router.post("/api/status",(req, res) => {
 	console.log("in");
 	req.body.path = "status";
 	kafka.make_request("order", req.body, (err, result) => {

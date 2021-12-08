@@ -62,7 +62,8 @@ const Adddish = () => {
     restaurantId
   };
 
-    axios.post("/restaurant/api/adddish/", {dishes:dishes}, {headers: { 'Authorization':restaurant.token.token}})
+    axios.post("/restaurant/api/adddish/", {dishes:dishes},
+)
     .then((response) => {
       console.log("update", response);
       if (response.data.error) {

@@ -1,0 +1,10 @@
+.card_res {
+    display: flex;
+    flex-direction: column;
+    margin: 25px;
+    margin-top: 300;
+}
+
+.cardd_res{
+    margin-top: 300;
+}

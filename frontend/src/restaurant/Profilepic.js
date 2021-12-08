@@ -8,9 +8,7 @@ async function postImages({image,restaurantId}){
     formData.append("image", image)
     formData.append("restaurantId", restaurantId)
     const result = await axios.post('/imageRestaurant/api/images/', formData, 
-    { 
-        headers: {'Content-Type': 'multipart/form-data'}
-    })
+    )
     console.log("result", result)
     localStorage.setItem('respkey', result.data.key);
     return result.data;

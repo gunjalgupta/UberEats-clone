@@ -1,5 +1,4 @@
 const graphql = require('graphql');
-//const _ = require('lodash');
 var bcrypt = require('bcrypt-nodejs');
 const Customers = require('../models/customer')
 const Restaurants = require("../models/restaurant");
@@ -12,7 +11,6 @@ const {
     GraphQLSchema,
     GraphQLID,
     GraphQLInt,
-    GraphQLList,
     GraphQLBoolean,
 } = graphql;
 
@@ -472,6 +470,15 @@ const Mutation = new GraphQLObjectType({
             }
         },
         updateUser: {
+            args: {
+                customerId: {
+                    type: GraphQLString
+                },
+                values: [{
+                    type: GraphQLString
+                }],
+                
+            },
             type: CustomerType,
             resolve(parent, args) {
                 let customerId= args.customerId;
@@ -489,6 +496,15 @@ const Mutation = new GraphQLObjectType({
             }
         },
         updateRes: {
+            args: {
+                restaurantId: {
+                    type: GraphQLString
+                },
+                values: [{
+                    type: GraphQLString
+                }],
+                
+            },
             type: RestaurantType,
             resolve(parent, args) {
                 let restaurantId= args.restaurantId;

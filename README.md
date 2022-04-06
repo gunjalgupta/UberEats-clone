@@ -17,7 +17,7 @@ Download Kafka zip and install in your local machine
 Create topics as mentioned in server.js file
 Open the terminal in the folder "kafka-backend".
 Execute "npm install" or "npm i" to install all the dependencies.
-Create an accound in https://www.mongodb.com/cloud/atlas. Fetch the connection uri and update this path in config.js file for mongoDB variable.
+Create an account in https://www.mongodb.com/cloud/atlas. Fetch the connection uri and update this path in config.js file for mongoDB variable.
 Update the appServer & backendServer.
 Run node server.js
 
@@ -30,13 +30,7 @@ Install REDUX Dev tools extension on chrome to see the Redux state changes
 
 Open the browser and navigate to Front end server's IP address with Port number (Eg: localhost:3000)
 
-## Application Screenshots: 
-
-### Landing Page: 
-
-### Login Page:
-
-### Dashboard Page:
+## Application Demo: https://www.youtube.com/watch?v=fzRbj5F-HR8
 
 
 

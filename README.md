@@ -1,6 +1,6 @@
 # UberEats-clone
 
-# Tech Stack: ReactJS, NodeJS Redux, MongoDB, Kafka and Passport-JWT 
+## Tech Stack: ReactJS, NodeJS Redux, MongoDB, Kafka and Passport-JWT 
 
 ### How to set up this project ? 
 > Please follow below steps:

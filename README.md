@@ -30,7 +30,8 @@ Install REDUX Dev tools extension on chrome to see the Redux state changes
 
 Open the browser and navigate to Front end server's IP address with Port number (Eg: localhost:3000)
 
-## Application Demo: https://www.youtube.com/watch?v=fzRbj5F-HR8
+## Application Demo: 
+https://www.youtube.com/watch?v=fzRbj5F-HR8
 
 
 
